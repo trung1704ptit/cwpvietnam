@@ -1,9 +1,15 @@
 import type { Metadata } from 'next'
 
 import { cn } from '@/utilities/ui'
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
+import { Lato } from 'next/font/google'
 import React from 'react'
+
+const lato = Lato({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['300', '400', '700'],
+  variable: '--font-lato',
+  display: 'swap',
+})
 
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
@@ -47,7 +53,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const locale = await getLocale()
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang={locale} suppressHydrationWarning>
+    <html className={cn(lato.variable)} lang={locale} suppressHydrationWarning>
       <head>
         <InitTheme />
         <style
@@ -58,7 +64,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
-      <body>
+      <body className={cn('font-sans antialiased', lato.className)}>
         <Providers>
           <AdminBar
             adminBarProps={{
@@ -75,11 +81,27 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   )
 }
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getServerSideURL()),
-  openGraph: mergeOpenGraph(),
-  twitter: {
-    card: 'summary_large_image',
-    creator: '@payloadcms',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  let title = 'Cancer Wellness Program'
+
+  try {
+    const settings = await getCachedGlobal('settings', 0)()
+    if (settings?.siteTitle?.trim()) {
+      title = settings.siteTitle.trim()
+    }
+  } catch {
+    // use default title
+  }
+
+  return {
+    metadataBase: new URL(getServerSideURL()),
+    title: {
+      default: title,
+      template: `%s | ${title}`,
+    },
+    openGraph: mergeOpenGraph({ siteName: title, title }),
+    twitter: {
+      card: 'summary_large_image',
+    },
+  }
 }

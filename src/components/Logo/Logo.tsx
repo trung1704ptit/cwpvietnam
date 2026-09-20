@@ -2,13 +2,19 @@ import clsx from 'clsx'
 import React from 'react'
 
 interface Props {
+  alt?: string
   className?: string
   loading?: 'lazy' | 'eager'
   priority?: 'auto' | 'high' | 'low'
 }
 
 export const Logo = (props: Props) => {
-  const { loading: loadingFromProps, priority: priorityFromProps, className } = props
+  const {
+    alt = 'Cancer Wellness Program',
+    loading: loadingFromProps,
+    priority: priorityFromProps,
+    className,
+  } = props
 
   const loading = loadingFromProps || 'lazy'
   const priority = priorityFromProps || 'low'
@@ -16,14 +22,14 @@ export const Logo = (props: Props) => {
   return (
     /* eslint-disable @next/next/no-img-element */
     <img
-      alt="Payload Logo"
-      width={193}
-      height={34}
+      alt={alt}
+      width={240}
+      height={48}
       loading={loading}
       fetchPriority={priority}
       decoding="async"
-      className={clsx('max-w-[9.375rem] w-full h-[34px]', className)}
-      src="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-logo-light.svg"
+      className={clsx('h-auto max-h-14 w-auto max-w-[15rem]', className)}
+      src="/logo-text.png"
     />
   )
 }

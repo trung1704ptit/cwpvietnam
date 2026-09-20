@@ -31,6 +31,34 @@ export const Settings: GlobalConfig = {
         return true
       },
     },
+    {
+      name: 'footerBackgroundColor',
+      type: 'text',
+      label: 'Footer Background Color',
+      defaultValue: '#ffefec',
+      required: true,
+      admin: {
+        description: 'Background color for the site footer.',
+        placeholder: '#ffefec',
+      },
+      validate: (value: string | null | undefined) => {
+        if (typeof value !== 'string' || !HEX_COLOR.test(value)) {
+          return 'Enter a valid hex color, e.g. #ffefec'
+        }
+
+        return true
+      },
+    },
+    {
+      name: 'siteTitle',
+      type: 'text',
+      label: 'Site Title',
+      defaultValue: 'Cancer Wellness Program',
+      required: true,
+      admin: {
+        description: 'Used in the logo alt text and browser metadata.',
+      },
+    },
   ],
   hooks: {
     afterChange: [revalidateSettings],

@@ -21,8 +21,6 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const navGlobals = ['header', 'footer'] as const
-
 const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
 // Next.js revalidation errors are normal when seeding the database without a server running
@@ -45,20 +43,25 @@ export const seed = async ({
   payload.logger.info(`— Clearing collections and globals...`)
 
   // clear the database
-  await Promise.all(
-    navGlobals.map((global) =>
-      payload.updateGlobal({
-        slug: global,
-        data: {
-          navItems: [],
-        },
-        depth: 0,
-        context: {
-          disableRevalidate: true,
-        },
-      }),
-    ),
-  )
+  await Promise.all([
+    payload.updateGlobal({
+      slug: 'header',
+      data: { navItems: [] },
+      depth: 0,
+      context: { disableRevalidate: true },
+    }),
+    payload.updateGlobal({
+      slug: 'footer',
+      data: {
+        contact: {},
+        description: '',
+        navItems: [],
+        socialLinks: [],
+      },
+      depth: 0,
+      context: { disableRevalidate: true },
+    }),
+  ])
 
   await Promise.all(
     collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
@@ -214,7 +217,7 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding pages...`)
 
-  const [_, contactPage] = await Promise.all([
+  const [homePage, contactPage] = await Promise.all([
     payload.create({
       collection: 'pages',
       depth: 0,
@@ -301,35 +304,66 @@ export const seed = async ({
     payload.updateGlobal({
       slug: 'settings',
       data: {
+        footerBackgroundColor: '#ffefec',
         primaryColor: '#dd3e60',
+        siteTitle: 'Cancer Wellness Program',
       },
     }),
     payload.updateGlobal({
       slug: 'footer',
       locale: 'vi',
       data: {
+        description:
+          'Chương trình Cancer Wellness Program tại Việt Nam hướng tới cải thiện quản lý triệu chứng thường gặp và sức khỏe toàn diện cho người đang sống chung và sau điều trị ung thư.',
+        contact: {
+          address: 'VinUniversity, Vinhomes Ocean Park, Đa Tốn, Gia Lâm, Hà Nội',
+          email: 'cwpvietnam@gmail.com',
+          phone: '(+84) 247 108 9779 (ext. 9025)',
+        },
         navItems: [
           {
             link: {
-              type: 'custom',
-              label: 'Quản trị',
-              url: '/admin',
+              type: 'reference',
+              label: 'Trang chủ',
+              reference: { relationTo: 'pages', value: homePage.id },
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Mã nguồn',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/3.x/templates/website',
+              label: 'Về chúng tôi',
+              url: '/about-us',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Payload',
+              label: 'Chương trình',
+              url: '/our-program',
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              label: 'Liên hệ',
+              reference: { relationTo: 'pages', value: contactPage.id },
+            },
+          },
+        ],
+        socialLinks: [
+          {
+            link: {
+              type: 'custom',
+              label: 'Facebook',
               newTab: true,
-              url: 'https://payloadcms.com/',
+              url: 'https://www.facebook.com/',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Email',
+              url: 'mailto:cwpvietnam@gmail.com',
             },
           },
         ],
@@ -339,28 +373,57 @@ export const seed = async ({
       slug: 'footer',
       locale: 'en',
       data: {
+        description:
+          'Cancer Wellness Program in Vietnam aims to improve common symptom management and wellness in people living with and beyond cancer',
+        contact: {
+          address: 'VinUniversity, Vinhomes Ocean Park, Da Ton, Gia Lam, Ha Noi',
+          email: 'cwpvietnam@gmail.com',
+          phone: '(+84) 247 108 9779 (ext. 9025)',
+        },
         navItems: [
           {
             link: {
-              type: 'custom',
-              label: 'Admin',
-              url: '/admin',
+              type: 'reference',
+              label: 'Home',
+              reference: { relationTo: 'pages', value: homePage.id },
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Source Code',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/3.x/templates/website',
+              label: 'About Us',
+              url: '/about-us',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Payload',
+              label: 'Our Program',
+              url: '/our-program',
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              label: 'Contact Us',
+              reference: { relationTo: 'pages', value: contactPage.id },
+            },
+          },
+        ],
+        socialLinks: [
+          {
+            link: {
+              type: 'custom',
+              label: 'Facebook',
               newTab: true,
-              url: 'https://payloadcms.com/',
+              url: 'https://www.facebook.com/',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Email',
+              url: 'mailto:cwpvietnam@gmail.com',
             },
           },
         ],

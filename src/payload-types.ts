@@ -1723,7 +1723,36 @@ export interface Header {
  */
 export interface Footer {
   id: number;
+  /**
+   * Short program description shown under the logo.
+   */
+  description?: string | null;
+  contact?: {
+    address?: string | null;
+    phone?: string | null;
+    email?: string | null;
+  };
   navItems?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  socialLinks?:
     | {
         link: {
           type?: ('reference' | 'custom') | null;
@@ -1756,6 +1785,14 @@ export interface Setting {
    * Brand primary color used for buttons, links, and accents.
    */
   primaryColor: string;
+  /**
+   * Background color for the site footer.
+   */
+  footerBackgroundColor: string;
+  /**
+   * Used in the logo alt text and browser metadata.
+   */
+  siteTitle: string;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1801,7 +1838,29 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  description?: T;
+  contact?:
+    | T
+    | {
+        address?: T;
+        phone?: T;
+        email?: T;
+      };
   navItems?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  socialLinks?:
     | T
     | {
         link?:
@@ -1825,6 +1884,8 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface SettingsSelect<T extends boolean = true> {
   primaryColor?: T;
+  footerBackgroundColor?: T;
+  siteTitle?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -10,7 +10,55 @@ export const Footer: GlobalConfig = {
   },
   fields: [
     {
+      name: 'description',
+      type: 'textarea',
+      localized: true,
+      admin: {
+        description: 'Short program description shown under the logo.',
+      },
+    },
+    {
+      name: 'contact',
+      type: 'group',
+      label: 'Contact Information',
+      fields: [
+        {
+          name: 'address',
+          type: 'textarea',
+          localized: true,
+        },
+        {
+          name: 'phone',
+          type: 'text',
+        },
+        {
+          name: 'email',
+          type: 'email',
+        },
+      ],
+    },
+    {
       name: 'navItems',
+      label: 'Basic Site Links',
+      type: 'array',
+      localized: true,
+      fields: [
+        link({
+          appearances: false,
+          disableLocalized: true,
+        }),
+      ],
+      maxRows: 8,
+      admin: {
+        initCollapsed: true,
+        components: {
+          RowLabel: '@/Footer/RowLabel#RowLabel',
+        },
+      },
+    },
+    {
+      name: 'socialLinks',
+      label: 'Get Connected Links',
       type: 'array',
       localized: true,
       fields: [
@@ -23,7 +71,7 @@ export const Footer: GlobalConfig = {
       admin: {
         initCollapsed: true,
         components: {
-          RowLabel: '@/Footer/RowLabel#RowLabel',
+          RowLabel: '@/Footer/SocialRowLabel#SocialRowLabel',
         },
       },
     },
