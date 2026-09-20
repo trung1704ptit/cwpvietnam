@@ -15,9 +15,32 @@ export const Header: GlobalConfig = {
       fields: [
         link({
           appearances: false,
+          disableRequired: true,
         }),
+        {
+          name: 'children',
+          type: 'array',
+          admin: {
+            description: 'Optional submenu shown under this item.',
+            initCollapsed: true,
+            components: {
+              RowLabel: '@/Header/RowLabel#RowLabel',
+            },
+          },
+          fields: [
+            link({
+              appearances: false,
+            }),
+          ],
+          label: 'Nested menu',
+          labels: {
+            singular: 'Nested item',
+            plural: 'Nested items',
+          },
+          maxRows: 8,
+        },
       ],
-      maxRows: 6,
+      maxRows: 8,
       admin: {
         initCollapsed: true,
         components: {

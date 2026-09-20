@@ -228,6 +228,15 @@ export const seed = async ({
               label: 'Posts',
               url: '/posts',
             },
+            children: [
+              {
+                link: {
+                  type: 'custom',
+                  label: 'All posts',
+                  url: '/posts',
+                },
+              },
+            ],
           },
           {
             link: {
@@ -240,6 +249,12 @@ export const seed = async ({
             },
           },
         ],
+      },
+    }),
+    payload.updateGlobal({
+      slug: 'settings',
+      data: {
+        primaryColor: '#dd3e60',
       },
     }),
     payload.updateGlobal({
