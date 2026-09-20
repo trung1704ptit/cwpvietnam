@@ -7,6 +7,8 @@ import React from 'react'
 import { Search } from '@/search/Component'
 import PageClient from './page.client'
 import { CardPostData } from '@/components/Card'
+import { getMessages } from '@/i18n/messages'
+import { getLocale } from '@/utilities/getLocale'
 
 type Args = {
   searchParams: Promise<{
@@ -15,26 +17,35 @@ type Args = {
 }
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { q: query } = await searchParamsPromise
+  const locale = await getLocale()
+  const t = getMessages(locale)
   const payload = await getPayload({ config: configPromise })
 
   const posts = await payload.find({
-    collection: 'search',
+    collection: 'posts',
     depth: 1,
     limit: 12,
+    locale,
+    overrideAccess: false,
+    pagination: false,
     select: {
       title: true,
       slug: true,
       categories: true,
       meta: true,
+      shortDescription: true,
     },
-    // pagination: false reduces overhead if you don't need totalDocs
-    pagination: false,
     ...(query
       ? {
           where: {
             or: [
               {
                 title: {
+                  like: query,
+                },
+              },
+              {
+                shortDescription: {
                   like: query,
                 },
               },
@@ -64,10 +75,10 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       <PageClient />
       <div className="container mb-16">
         <div className="prose dark:prose-invert max-w-none text-center">
-          <h1 className="mb-8 lg:mb-16">Search</h1>
+          <h1 className="mb-8 lg:mb-16">{t.search}</h1>
 
           <div className="max-w-[50rem] mx-auto">
-            <Search />
+            <Search initialQuery={query || ''} live placeholder={t.searchPlaceholder} submitLabel={t.search} />
           </div>
         </div>
       </div>
@@ -75,7 +86,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       {posts.totalDocs > 0 ? (
         <CollectionArchive posts={posts.docs as CardPostData[]} />
       ) : (
-        <div className="container">No results found.</div>
+        <div className="container">{t.noResults}</div>
       )}
     </div>
   )

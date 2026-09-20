@@ -19,7 +19,12 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
-    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
+    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+    "typecheck": "cross-env NODE_OPTIONS=--no-deprecation tsc --noEmit",
+    "db:fresh": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:fresh --force-accept-warning",
+    "db:migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
+    "db:migrate:status": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:status",
+    "prepare": "husky"
   },
   "dependencies": {
     "@payloadcms/admin-bar": "3.90.1",
@@ -55,7 +60,6 @@
     "@payloadcms/db-postgres": "3.90.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.2.0",
     "@playwright/test": "1.58.2",
     "@tailwindcss/postcss": "^4.1.18",
     "@tailwindcss/typography": "^0.5.19",
@@ -68,6 +72,7 @@
     "autoprefixer": "^10.4.19",
     "eslint": "^9.16.0",
     "eslint-config-next": "16.3.3",
+    "husky": "^9.1.7",
     "jsdom": "28.0.0",
     "postcss": "^8.5.28",
     "prettier": "^3.4.2",

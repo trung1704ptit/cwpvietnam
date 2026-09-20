@@ -2,6 +2,7 @@ import { getServerSideSitemap } from 'next-sitemap'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
+import { locales } from '@/i18n/config'
 
 const getPagesSitemap = unstable_cache(
   async () => {
@@ -11,26 +12,8 @@ const getPagesSitemap = unstable_cache(
       process.env.VERCEL_PROJECT_PRODUCTION_URL ||
       'https://example.com'
 
-    const results = await payload.find({
-      collection: 'pages',
-      overrideAccess: false,
-      draft: false,
-      depth: 0,
-      limit: 1000,
-      pagination: false,
-      where: {
-        _status: {
-          equals: 'published',
-        },
-      },
-      select: {
-        slug: true,
-        updatedAt: true,
-      },
-    })
-
     const dateFallback = new Date().toISOString()
-
+    const seen = new Set<string>()
     const defaultSitemap = [
       {
         loc: `${SITE_URL}/search`,
@@ -42,16 +25,40 @@ const getPagesSitemap = unstable_cache(
       },
     ]
 
-    const sitemap = results.docs
-      ? results.docs
-          .filter((page) => Boolean(page?.slug))
-          .map((page) => {
-            return {
-              loc: page?.slug === 'home' ? `${SITE_URL}/` : `${SITE_URL}/${page?.slug}`,
-              lastmod: page.updatedAt || dateFallback,
-            }
+    const sitemap: { loc: string; lastmod: string }[] = []
+
+    for (const locale of locales) {
+      const results = await payload.find({
+        collection: 'pages',
+        overrideAccess: false,
+        draft: false,
+        depth: 0,
+        limit: 1000,
+        locale,
+        pagination: false,
+        where: {
+          _status: {
+            equals: 'published',
+          },
+        },
+        select: {
+          slug: true,
+          updatedAt: true,
+        },
+      })
+
+      results.docs
+        ?.filter((page) => Boolean(page?.slug))
+        .forEach((page) => {
+          const loc = page?.slug === 'home' ? `${SITE_URL}/` : `${SITE_URL}/${page?.slug}`
+          if (seen.has(loc)) return
+          seen.add(loc)
+          sitemap.push({
+            loc,
+            lastmod: page.updatedAt || dateFallback,
           })
-      : []
+        })
+    }
 
     return [...defaultSitemap, ...sitemap]
   },

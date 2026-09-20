@@ -8,6 +8,7 @@ import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Tags } from './collections/Tags'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -62,10 +63,27 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    migrationDir: path.resolve(dirname, 'migrations'),
+    // Use committed migrations instead of interactive Drizzle push (avoids rename prompts).
+    push: false,
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Media, Categories, Tags, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, Settings],
+  localization: {
+    defaultLocale: 'vi',
+    fallback: true,
+    locales: [
+      {
+        code: 'vi',
+        label: 'Tiếng Việt',
+      },
+      {
+        code: 'en',
+        label: 'English',
+      },
+    ],
+  },
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

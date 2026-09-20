@@ -4,21 +4,27 @@ import React from 'react'
 
 import type { Header } from '@/payload-types'
 
+import { LocaleSwitcher } from '@/components/LocaleSwitcher'
+import type { Locale } from '@/i18n/config'
 import { Logo } from '@/components/Logo/Logo'
 import { HeaderNav } from './Nav'
 
 interface HeaderClientProps {
   data: Header
+  locale: Locale
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
+export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
   return (
     <header className="sticky top-0 z-40 w-full bg-primary text-white shadow-md">
       <div className="container flex items-center justify-between py-4">
         <Link href="/">
           <Logo loading="eager" priority="high" />
         </Link>
-        <HeaderNav data={data} />
+        <div className="flex items-center gap-3">
+          <HeaderNav data={data} locale={locale} />
+          <LocaleSwitcher locale={locale} />
+        </div>
       </div>
     </header>
   )

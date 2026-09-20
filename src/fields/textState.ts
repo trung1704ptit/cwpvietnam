@@ -47,7 +47,11 @@ export const textState = {
   },
 }
 
-export function getTextStateStyle(node: { $?: Record<string, string | null | undefined> }) {
+type TextStateNode = {
+  $?: Record<string, string | null | undefined>
+}
+
+export function getTextStateStyle(node: TextStateNode) {
   const state = node.$
   if (!state) return undefined
 
@@ -55,8 +59,10 @@ export function getTextStateStyle(node: { $?: Record<string, string | null | und
 
   for (const [stateKey, stateValue] of Object.entries(state)) {
     if (!stateValue) continue
-    const group = textState[stateKey as keyof typeof textState]
-    const css = group?.[stateValue as keyof typeof group]?.css
+    const group = textState[stateKey as keyof typeof textState] as
+      | Record<string, { css?: Record<string, string> }>
+      | undefined
+    const css = group?.[stateValue]?.css
     if (!css) continue
     Object.assign(style, css)
   }

@@ -2,6 +2,7 @@ import { getServerSideSitemap } from 'next-sitemap'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
+import { locales } from '@/i18n/config'
 
 const getPostsSitemap = unstable_cache(
   async () => {
@@ -11,34 +12,42 @@ const getPostsSitemap = unstable_cache(
       process.env.VERCEL_PROJECT_PRODUCTION_URL ||
       'https://example.com'
 
-    const results = await payload.find({
-      collection: 'posts',
-      overrideAccess: false,
-      draft: false,
-      depth: 0,
-      limit: 1000,
-      pagination: false,
-      where: {
-        _status: {
-          equals: 'published',
-        },
-      },
-      select: {
-        slug: true,
-        updatedAt: true,
-      },
-    })
-
     const dateFallback = new Date().toISOString()
+    const sitemap: { loc: string; lastmod: string }[] = []
+    const seen = new Set<string>()
 
-    const sitemap = results.docs
-      ? results.docs
-          .filter((post) => Boolean(post?.slug))
-          .map((post) => ({
-            loc: `${SITE_URL}/posts/${post?.slug}`,
+    for (const locale of locales) {
+      const results = await payload.find({
+        collection: 'posts',
+        overrideAccess: false,
+        draft: false,
+        depth: 0,
+        limit: 1000,
+        locale,
+        pagination: false,
+        where: {
+          _status: {
+            equals: 'published',
+          },
+        },
+        select: {
+          slug: true,
+          updatedAt: true,
+        },
+      })
+
+      results.docs
+        ?.filter((post) => Boolean(post?.slug))
+        .forEach((post) => {
+          const loc = `${SITE_URL}/posts/${post?.slug}`
+          if (seen.has(loc)) return
+          seen.add(loc)
+          sitemap.push({
+            loc,
             lastmod: post.updatedAt || dateFallback,
-          }))
-      : []
+          })
+        })
+    }
 
     return sitemap
   },

@@ -25,7 +25,8 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { slugField } from 'payload'
+import { slugField } from '@/fields/slug'
+import { draftEditComponents } from '@/collections/draftEditComponents'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -42,12 +43,14 @@ export const Posts: CollectionConfig<'posts'> = {
     title: true,
     slug: true,
     categories: true,
+    shortDescription: true,
     meta: {
       image: true,
       description: true,
     },
   },
   admin: {
+    components: draftEditComponents,
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>
@@ -69,7 +72,16 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'title',
       type: 'text',
+      localized: true,
       required: true,
+    },
+    {
+      name: 'shortDescription',
+      type: 'textarea',
+      admin: {
+        description: 'Shown on the posts list, truncated to 3 lines.',
+      },
+      localized: true,
     },
     {
       type: 'tabs',
@@ -97,6 +109,7 @@ export const Posts: CollectionConfig<'posts'> = {
                 },
               }),
               label: false,
+              localized: true,
               required: true,
             },
           ],
@@ -128,6 +141,15 @@ export const Posts: CollectionConfig<'posts'> = {
               },
               hasMany: true,
               relationTo: 'categories',
+            },
+            {
+              name: 'tags',
+              type: 'relationship',
+              admin: {
+                position: 'sidebar',
+              },
+              hasMany: true,
+              relationTo: 'tags',
             },
           ],
           label: 'Meta',
@@ -223,9 +245,6 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   versions: {
     drafts: {
-      autosave: {
-        interval: 100, // We set this interval for optimal live preview
-      },
       schedulePublish: true,
     },
     maxPerDoc: 50,

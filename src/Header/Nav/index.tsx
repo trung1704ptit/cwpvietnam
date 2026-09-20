@@ -1,11 +1,14 @@
 'use client'
 
-import React, { useEffect, useId, useState } from 'react'
+import React, { useEffect, useId, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 
 import type { Header as HeaderType } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
+import { LocaleSwitcher } from '@/components/LocaleSwitcher'
+import { getMessages } from '@/i18n/messages'
+import type { Locale } from '@/i18n/config'
 import { getCMSLinkHref } from '@/utilities/getCMSLinkHref'
 import { cn } from '@/utilities/ui'
 import Link from 'next/link'
@@ -14,6 +17,12 @@ import { ChevronDown, Menu, SearchIcon, X } from 'lucide-react'
 
 type NavItem = NonNullable<HeaderType['navItems']>[number]
 type NavLink = NavItem['link']
+
+const emptySubscribe = () => () => {}
+
+function useIsClient() {
+  return useSyncExternalStore(emptySubscribe, () => true, () => false)
+}
 
 const NavItemLink: React.FC<{
   className?: string
@@ -138,17 +147,15 @@ const MobileNavItem: React.FC<{ item: NavItem }> = ({ item }) => {
 }
 
 const MobileDrawer: React.FC<{
+  locale: Locale
   menuOpen: boolean
   navItems: NavItem[]
   onClose: () => void
-}> = ({ menuOpen, navItems, onClose }) => {
-  const [mounted, setMounted] = useState(false)
+}> = ({ locale, menuOpen, navItems, onClose }) => {
+  const t = getMessages(locale)
+  const isClient = useIsClient()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) return null
+  if (!isClient) return null
 
   return createPortal(
     <div
@@ -174,9 +181,9 @@ const MobileDrawer: React.FC<{
         role="dialog"
       >
         <div className="flex items-center justify-between border-b border-white/20 px-4 py-4">
-          <p className="text-sm font-medium">Menu</p>
+          <p className="text-sm font-medium">{t.menu}</p>
           <button
-            aria-label="Close menu"
+            aria-label={t.closeMenu}
             className="inline-flex size-10 items-center justify-center rounded-md text-white"
             onClick={onClose}
             type="button"
@@ -190,8 +197,11 @@ const MobileDrawer: React.FC<{
           ))}
           <Link className="mt-4 flex items-center gap-2 py-3 text-base text-white" href="/search">
             <SearchIcon className="size-5" />
-            Search
+            {t.search}
           </Link>
+          <div className="mt-auto border-t border-white/20 py-4">
+            <LocaleSwitcher className="w-full" locale={locale} />
+          </div>
         </nav>
       </aside>
     </div>,
@@ -199,14 +209,16 @@ const MobileDrawer: React.FC<{
   )
 }
 
-export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
-  const [menuOpen, setMenuOpen] = useState(false)
+export const HeaderNav: React.FC<{ data: HeaderType; locale: Locale }> = ({ data, locale }) => {
   const pathname = usePathname()
-  const navItems = data?.navItems || []
 
-  useEffect(() => {
-    setMenuOpen(false)
-  }, [pathname])
+  return <HeaderNavInner data={data} key={pathname} locale={locale} />
+}
+
+const HeaderNavInner: React.FC<{ data: HeaderType; locale: Locale }> = ({ data, locale }) => {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const navItems = data?.navItems || []
+  const t = getMessages(locale)
 
   useEffect(() => {
     if (!menuOpen) return
@@ -233,7 +245,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
           <DesktopNavItem item={item} key={item.id || i} />
         ))}
         <Link href="/search">
-          <span className="sr-only">Search</span>
+          <span className="sr-only">{t.search}</span>
           <SearchIcon className="w-5 text-white" />
         </Link>
       </nav>
@@ -241,7 +253,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
       <button
         aria-controls="mobile-navigation"
         aria-expanded={menuOpen}
-        aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+        aria-label={menuOpen ? t.closeMenu : t.openMenu}
         className="inline-flex size-10 items-center justify-center rounded-md text-white lg:hidden"
         onClick={() => setMenuOpen((current) => !current)}
         type="button"
@@ -249,7 +261,12 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
         {menuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
       </button>
 
-      <MobileDrawer menuOpen={menuOpen} navItems={navItems} onClose={() => setMenuOpen(false)} />
+      <MobileDrawer
+        locale={locale}
+        menuOpen={menuOpen}
+        navItems={navItems}
+        onClose={() => setMenuOpen(false)}
+      />
     </div>
   )
 }

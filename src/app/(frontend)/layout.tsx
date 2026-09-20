@@ -16,6 +16,7 @@ import { draftMode } from 'next/headers'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getLocale } from '@/utilities/getLocale'
 import {
   DEFAULT_PRIMARY_COLOR,
   DEFAULT_PRIMARY_FOREGROUND,
@@ -43,9 +44,10 @@ async function getThemeColors() {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
   const { primaryColor, primaryForeground } = await getThemeColors()
+  const locale = await getLocale()
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
+    <html className={cn(GeistSans.variable, GeistMono.variable)} lang={locale} suppressHydrationWarning>
       <head>
         <InitTheme />
         <style

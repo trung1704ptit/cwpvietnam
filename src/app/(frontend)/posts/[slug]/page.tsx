@@ -5,8 +5,12 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
+import { redirect } from 'next/navigation'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
+import { locales } from '@/i18n/config'
+import { findByLocalizedSlug } from '@/utilities/findByLocalizedSlug'
+import { getLocale } from '@/utilities/getLocale'
 
 import type { Post } from '@/payload-types'
 
@@ -17,22 +21,27 @@ import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
-  const posts = await payload.find({
-    collection: 'posts',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
+  const slugs = new Set<string>()
 
-  const params = posts.docs.map(({ slug }) => {
-    return { slug }
-  })
+  for (const locale of locales) {
+    const posts = await payload.find({
+      collection: 'posts',
+      draft: false,
+      limit: 1000,
+      locale,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        slug: true,
+      },
+    })
 
-  return params
+    posts.docs.forEach(({ slug }) => {
+      if (slug) slugs.add(slug)
+    })
+  }
+
+  return [...slugs].map((slug) => ({ slug }))
 }
 
 type Args = {
@@ -47,9 +56,14 @@ export default async function Post({ params: paramsPromise }: Args) {
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/posts/' + decodedSlug
-  const post = await queryPostBySlug({ slug: decodedSlug })
+  const locale = await getLocale()
+  const post = await queryPostBySlug({ locale, slug: decodedSlug })
 
   if (!post) return <PayloadRedirects url={url} />
+
+  if (post.slug && post.slug !== decodedSlug) {
+    redirect(`/posts/${post.slug}`)
+  }
 
   return (
     <article className="pb-16">
@@ -81,28 +95,19 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { slug = '' } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const post = await queryPostBySlug({ slug: decodedSlug })
+  const locale = await getLocale()
+  const post = await queryPostBySlug({ locale, slug: decodedSlug })
 
   return generateMeta({ doc: post })
 }
 
-const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryPostBySlug = cache(async ({ locale, slug }: { locale: Awaited<ReturnType<typeof getLocale>>; slug: string }) => {
   const { isEnabled: draft } = await draftMode()
 
-  const payload = await getPayload({ config: configPromise })
-
-  const result = await payload.find({
+  return findByLocalizedSlug<Post>({
     collection: 'posts',
     draft,
-    limit: 1,
-    overrideAccess: draft,
-    pagination: false,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
+    locale,
+    slug,
   })
-
-  return result.docs?.[0] || null
 })

@@ -12,9 +12,11 @@ export const Header: GlobalConfig = {
     {
       name: 'navItems',
       type: 'array',
+      localized: true,
       fields: [
         link({
           appearances: false,
+          disableLocalized: true,
           disableRequired: true,
         }),
         {
@@ -30,6 +32,7 @@ export const Header: GlobalConfig = {
           fields: [
             link({
               appearances: false,
+              disableLocalized: true,
             }),
           ],
           label: 'Nested menu',

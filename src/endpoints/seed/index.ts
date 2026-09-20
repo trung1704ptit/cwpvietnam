@@ -15,6 +15,7 @@ const collections: CollectionSlug[] = [
   'media',
   'pages',
   'posts',
+  'tags',
   'forms',
   'form-submissions',
   'search',
@@ -130,9 +131,20 @@ export const seed = async ({
     categories.map((category) =>
       payload.create({
         collection: 'categories',
+        locale: 'en',
         data: {
           title: category,
           slug: category,
+        },
+      }),
+    ),
+    ['Tin nổi bật', 'Hướng dẫn', 'Sự kiện'].map((tag) =>
+      payload.create({
+        collection: 'tags',
+        locale: 'vi',
+        data: {
+          title: tag,
+          slug: tag,
         },
       }),
     ),
@@ -220,6 +232,41 @@ export const seed = async ({
   await Promise.all([
     payload.updateGlobal({
       slug: 'header',
+      locale: 'vi',
+      data: {
+        navItems: [
+          {
+            link: {
+              type: 'custom',
+              label: 'Bài viết',
+              url: '/posts',
+            },
+            children: [
+              {
+                link: {
+                  type: 'custom',
+                  label: 'Tất cả bài viết',
+                  url: '/posts',
+                },
+              },
+            ],
+          },
+          {
+            link: {
+              type: 'reference',
+              label: 'Liên hệ',
+              reference: {
+                relationTo: 'pages',
+                value: contactPage.id,
+              },
+            },
+          },
+        ],
+      },
+    }),
+    payload.updateGlobal({
+      slug: 'header',
+      locale: 'en',
       data: {
         navItems: [
           {
@@ -259,6 +306,38 @@ export const seed = async ({
     }),
     payload.updateGlobal({
       slug: 'footer',
+      locale: 'vi',
+      data: {
+        navItems: [
+          {
+            link: {
+              type: 'custom',
+              label: 'Quản trị',
+              url: '/admin',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Mã nguồn',
+              newTab: true,
+              url: 'https://github.com/payloadcms/payload/tree/3.x/templates/website',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Payload',
+              newTab: true,
+              url: 'https://payloadcms.com/',
+            },
+          },
+        ],
+      },
+    }),
+    payload.updateGlobal({
+      slug: 'footer',
+      locale: 'en',
       data: {
         navItems: [
           {

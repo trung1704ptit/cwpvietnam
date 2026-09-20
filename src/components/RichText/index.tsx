@@ -40,8 +40,10 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
   text: (args) => {
-    const converted = defaultConverters.text?.(args)
-    const style = getTextStateStyle(args.node)
+    const textConverter = defaultConverters.text
+    const converted =
+      typeof textConverter === 'function' ? textConverter(args) : textConverter
+    const style = getTextStateStyle(args.node as Parameters<typeof getTextStateStyle>[0])
 
     if (!style || converted == null) return converted
 
