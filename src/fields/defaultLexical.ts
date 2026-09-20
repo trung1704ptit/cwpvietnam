@@ -1,20 +1,58 @@
 import type { TextFieldSingleValidation } from 'payload'
 import {
+  AlignFeature,
+  BlockquoteFeature,
   BoldFeature,
+  ChecklistFeature,
+  EXPERIMENTAL_TableFeature,
+  FixedToolbarFeature,
+  HeadingFeature,
+  HorizontalRuleFeature,
+  IndentFeature,
+  InlineCodeFeature,
+  InlineToolbarFeature,
   ItalicFeature,
   LinkFeature,
+  OrderedListFeature,
   ParagraphFeature,
-  lexicalEditor,
+  RelationshipFeature,
+  StrikethroughFeature,
+  SubscriptFeature,
+  SuperscriptFeature,
+  TextStateFeature,
   UnderlineFeature,
+  UnorderedListFeature,
+  UploadFeature,
+  lexicalEditor,
   type LinkFields,
 } from '@payloadcms/richtext-lexical'
+
+import { textState } from '@/fields/textState'
 
 export const defaultLexical = lexicalEditor({
   features: [
     ParagraphFeature(),
-    UnderlineFeature(),
+    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }),
+    AlignFeature(),
+    IndentFeature(),
     BoldFeature(),
     ItalicFeature(),
+    UnderlineFeature(),
+    StrikethroughFeature(),
+    SubscriptFeature(),
+    SuperscriptFeature(),
+    InlineCodeFeature(),
+    UnorderedListFeature(),
+    OrderedListFeature(),
+    ChecklistFeature(),
+    BlockquoteFeature(),
+    HorizontalRuleFeature(),
+    UploadFeature({
+      enabledCollections: ['media'],
+    }),
+    RelationshipFeature({
+      enabledCollections: ['pages', 'posts'],
+    }),
     LinkFeature({
       enabledCollections: ['pages', 'posts'],
       fields: ({ defaultFields }) => {
@@ -35,7 +73,7 @@ export const defaultLexical = lexicalEditor({
             required: true,
             validate: ((value, options) => {
               if ((options?.siblingData as LinkFields)?.linkType === 'internal') {
-                return true // no validation needed, as no url should exist for internal links
+                return true
               }
               return value ? true : 'URL is required'
             }) as TextFieldSingleValidation,
@@ -43,5 +81,11 @@ export const defaultLexical = lexicalEditor({
         ]
       },
     }),
+    TextStateFeature({
+      state: textState,
+    }),
+    EXPERIMENTAL_TableFeature(),
+    InlineToolbarFeature(),
+    FixedToolbarFeature(),
   ],
 })

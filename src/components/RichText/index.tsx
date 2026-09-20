@@ -20,6 +20,7 @@ import type {
 } from '@/payload-types'
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { getTextStateStyle } from '@/fields/textState'
 import { cn } from '@/utilities/ui'
 
 type NodeTypes =
@@ -38,6 +39,14 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
+  text: (args) => {
+    const converted = defaultConverters.text?.(args)
+    const style = getTextStateStyle(args.node)
+
+    if (!style || converted == null) return converted
+
+    return <span style={style}>{converted}</span>
+  },
   blocks: {
     banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
     mediaBlock: ({ node }) => (
