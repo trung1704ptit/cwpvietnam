@@ -21,7 +21,11 @@ type NavLink = NavItem['link']
 const emptySubscribe = () => () => {}
 
 function useIsClient() {
-  return useSyncExternalStore(emptySubscribe, () => true, () => false)
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  )
 }
 
 const NavItemLink: React.FC<{
@@ -35,7 +39,14 @@ const NavItemLink: React.FC<{
     return <span className={className}>{link.label}</span>
   }
 
-  return <CMSLink {...link} appearance="inline" className={cn('text-white hover:text-white/80', className)} onClick={onClick} />
+  return (
+    <CMSLink
+      {...link}
+      appearance="inline"
+      className={cn('text-white hover:text-white/80', className)}
+      onClick={onClick}
+    />
+  )
 }
 
 const DesktopNavItem: React.FC<{ item: NavItem }> = ({ item }) => {
@@ -99,9 +110,7 @@ const MobileNavItem: React.FC<{ item: NavItem }> = ({ item }) => {
   const href = getCMSLinkHref(item.link)
 
   if (!hasChildren) {
-    return (
-      <NavItemLink className="flex w-full justify-start py-3 text-base" link={item.link} />
-    )
+    return <NavItemLink className="flex w-full justify-start py-3 text-base" link={item.link} />
   }
 
   return (

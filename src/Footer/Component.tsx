@@ -38,11 +38,13 @@ export async function Footer() {
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))] lg:gap-8">
           <div className="max-w-md space-y-4">
             <Link className="inline-flex flex-col gap-3" href="/">
-              <Logo alt={siteTitle} loading="lazy" />
+              <Logo alt={siteTitle} loading="lazy" color="text" />
               <span className="text-lg font-semibold tracking-tight text-primary">{siteTitle}</span>
             </Link>
             {footerData?.description && (
-              <p className="text-sm leading-relaxed text-muted-foreground">{footerData.description}</p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {footerData.description}
+              </p>
             )}
           </div>
 
@@ -54,14 +56,20 @@ export async function Footer() {
               {contact?.address && <li className="whitespace-pre-line">{contact.address}</li>}
               {contact?.phone && (
                 <li>
-                  <a className="hover:text-primary transition-colors" href={`tel:${contact.phone.replace(/\s/g, '')}`}>
+                  <a
+                    className="hover:text-primary transition-colors"
+                    href={`tel:${contact.phone.replace(/\s/g, '')}`}
+                  >
                     {contact.phone}
                   </a>
                 </li>
               )}
               {contact?.email && (
                 <li>
-                  <a className="hover:text-primary transition-colors" href={`mailto:${contact.email}`}>
+                  <a
+                    className="hover:text-primary transition-colors"
+                    href={`mailto:${contact.email}`}
+                  >
                     {contact.email}
                   </a>
                 </li>
@@ -70,7 +78,9 @@ export async function Footer() {
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">{t.basicSites}</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">
+              {t.basicSites}
+            </h2>
             <nav className="flex flex-col gap-2">
               {navItems.map(({ link }, i) => (
                 <CMSLink
@@ -83,7 +93,9 @@ export async function Footer() {
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">{t.getConnected}</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">
+              {t.getConnected}
+            </h2>
             <nav className="flex flex-col gap-2">
               {socialLinks.map(({ link }, i) => (
                 <CMSLink

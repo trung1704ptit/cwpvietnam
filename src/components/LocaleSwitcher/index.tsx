@@ -34,7 +34,7 @@ export const LocaleSwitcher: React.FC<{
       <SelectTrigger
         aria-label="Language"
         className={cn(
-          'h-9 w-auto min-w-[9.5rem] gap-2 border-white/30 bg-transparent px-3 text-white shadow-none',
+          'h-9 w-auto min-w-24 gap-2 border-white/30 bg-transparent px-3 text-white shadow-none',
           '[&_svg:not([class*=text-])]:text-white [&_svg]:opacity-80',
           'focus-visible:ring-white/30',
           className,

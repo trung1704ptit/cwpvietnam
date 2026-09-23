@@ -17,7 +17,7 @@ interface HeaderClientProps {
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
   return (
     <header className="sticky top-0 z-40 w-full bg-primary text-white shadow-md">
-      <div className="container flex items-center justify-between py-4">
+      <div className="container flex items-center justify-between py-1">
         <Link href="/">
           <Logo loading="eager" priority="high" />
         </Link>
