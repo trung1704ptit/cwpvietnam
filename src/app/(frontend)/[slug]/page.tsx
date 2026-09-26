@@ -75,7 +75,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     redirect(`/${page.slug}`)
   }
 
-  const { hero, layout } = page
+  const { hero, layout, title } = page
 
   return (
     <article className="pb-24">
@@ -85,7 +85,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      <RenderHero {...hero} />
+      <RenderHero {...hero} title={title} />
       <RenderBlocks blocks={layout} />
     </article>
   )

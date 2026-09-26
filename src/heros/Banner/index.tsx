@@ -8,7 +8,11 @@ import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 
-export const BannerHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
+type BannerHeroProps = Page['hero'] & {
+  title?: string | null
+}
+
+export const BannerHero: React.FC<BannerHeroProps> = ({ links, media, richText, title }) => {
   const { setHeaderTheme } = useHeaderTheme()
 
   useEffect(() => {
@@ -34,7 +38,18 @@ export const BannerHero: React.FC<Page['hero']> = ({ links, media, richText }) =
       </div>
       <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
       <div className="container relative z-10 flex items-center justify-center">
-        <div className="max-w-[36.5rem] md:text-center">
+        <div className="w-full max-w-6xl text-center">
+          {title && (
+            <div className="mb-6">
+              <h1 className="text-4xl font-medium leading-tight tracking-tight text-white md:text-6xl">
+                {title}
+              </h1>
+              <div
+                aria-hidden="true"
+                className="mx-auto mt-5 h-1 w-28 rounded-full bg-primary md:w-36"
+              />
+            </div>
+          )}
           {richText && <RichText className="mb-6" data={richText} enableGutter={false} />}
           {Array.isArray(links) && links.length > 0 && (
             <ul className="flex md:justify-center gap-4">

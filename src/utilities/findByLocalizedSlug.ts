@@ -1,7 +1,7 @@
 import configPromise from '@payload-config'
 import { getPayload, type CollectionSlug, type TypedLocale } from 'payload'
 
-import { locales, type Locale } from '@/i18n/config'
+import { defaultLocale, locales, type Locale } from '@/i18n/config'
 
 type Args = {
   collection: CollectionSlug
@@ -22,6 +22,7 @@ export async function findByLocalizedSlug<T = unknown>({
     const result = await payload.find({
       collection,
       draft,
+      fallbackLocale: false,
       limit: 1,
       locale: queryLocale,
       overrideAccess: draft,
@@ -37,7 +38,18 @@ export async function findByLocalizedSlug<T = unknown>({
   }
 
   const match = await findInLocale(locale)
-  if (match) return match as T
+  if (match && typeof match === 'object' && 'id' in match) {
+    const localized = await payload.findByID({
+      collection,
+      draft,
+      fallbackLocale: locale === defaultLocale ? false : defaultLocale,
+      id: match.id as string | number,
+      locale,
+      overrideAccess: draft,
+    })
+
+    return (localized as T) ?? null
+  }
 
   for (const otherLocale of locales) {
     if (otherLocale === locale) continue
@@ -48,6 +60,7 @@ export async function findByLocalizedSlug<T = unknown>({
     const localized = await payload.findByID({
       collection,
       draft,
+      fallbackLocale: otherLocale,
       id: found.id as string | number,
       locale,
       overrideAccess: draft,
