@@ -26,6 +26,8 @@ const getPagesSitemap = unstable_cache(
     ]
 
     const sitemap: { loc: string; lastmod: string }[] = []
+    const { homePage } = await payload.findGlobal({ slug: 'settings', depth: 0 })
+    const homePageId = homePage && typeof homePage === 'object' ? homePage.id : homePage
 
     for (const locale of locales) {
       const results = await payload.find({
@@ -50,7 +52,7 @@ const getPagesSitemap = unstable_cache(
       results.docs
         ?.filter((page) => Boolean(page?.slug))
         .forEach((page) => {
-          const loc = page?.slug === 'home' ? `${SITE_URL}/` : `${SITE_URL}/${page?.slug}`
+          const loc = page.id === homePageId ? `${SITE_URL}/` : `${SITE_URL}/${page?.slug}`
           if (seen.has(loc)) return
           seen.add(loc)
           sitemap.push({

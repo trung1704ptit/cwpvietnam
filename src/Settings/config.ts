@@ -14,6 +14,16 @@ export const Settings: GlobalConfig = {
   },
   fields: [
     {
+      name: 'homePage',
+      type: 'relationship',
+      relationTo: 'pages',
+      label: 'Home Page',
+      admin: {
+        description:
+          'Page shown at "/". Its own URL redirects to "/". Only published pages are visible on the site.',
+      },
+    },
+    {
       name: 'primaryColor',
       type: 'text',
       label: 'Primary Color',

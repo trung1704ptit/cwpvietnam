@@ -2,13 +2,14 @@ import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
-import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
+import { getPayload } from 'payload'
+import type { Page as PageType } from '@/payload-types'
 import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 import React, { cache } from 'react'
-import { homeStatic } from '@/endpoints/seed/home-static'
-import { locales } from '@/i18n/config'
+import { defaultLocale, locales } from '@/i18n/config'
 import { findByLocalizedSlug } from '@/utilities/findByLocalizedSlug'
+import { getHomePageId } from '@/utilities/getHomePageId'
 import { getLocale } from '@/utilities/getLocale'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
@@ -35,7 +36,7 @@ export async function generateStaticParams() {
     })
 
     pages.docs?.forEach((doc) => {
-      if (doc.slug && doc.slug !== 'home') slugs.add(doc.slug)
+      if (doc.slug) slugs.add(doc.slug)
     })
   }
 
@@ -50,29 +51,27 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
-  const { slug = 'home' } = await paramsPromise
+  const { slug } = await paramsPromise
   // Decode to support slugs with special characters
-  const decodedSlug = decodeURIComponent(slug)
-  const url = '/' + decodedSlug
+  const decodedSlug = slug ? decodeURIComponent(slug) : undefined
+  const url = decodedSlug ? '/' + decodedSlug : '/'
   const locale = await getLocale()
-  let page: RequiredDataFromCollectionSlug<'pages'> | null
+  const homePageId = await getHomePageId()
 
-  page = await queryPageBySlug({
-    locale,
-    slug: decodedSlug,
-  })
-
-  // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
-    page = homeStatic
-  }
+  const page = await queryPage({ locale, slug: decodedSlug })
 
   if (!page) {
     return <PayloadRedirects url={url} />
   }
 
-  if (page.slug && page.slug !== decodedSlug && decodedSlug !== 'home') {
-    redirect(`/${page.slug}`)
+  if (decodedSlug) {
+    if (homePageId && page.id === homePageId) {
+      redirect('/')
+    }
+
+    if (page.slug && page.slug !== decodedSlug) {
+      redirect(`/${page.slug}`)
+    }
   }
 
   const { hero, layout, title } = page
@@ -92,27 +91,48 @@ export default async function Page({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug = 'home' } = await paramsPromise
+  const { slug } = await paramsPromise
   // Decode to support slugs with special characters
-  const decodedSlug = decodeURIComponent(slug)
+  const decodedSlug = slug ? decodeURIComponent(slug) : undefined
   const locale = await getLocale()
-  const page = await queryPageBySlug({
-    locale,
-    slug: decodedSlug,
-  })
+  const page = await queryPage({ locale, slug: decodedSlug })
 
   return generateMeta({ doc: page })
 }
 
-const queryPageBySlug = cache(
-  async ({ locale, slug }: { locale: Awaited<ReturnType<typeof getLocale>>; slug: string }) => {
+/** Without a slug, returns the page selected as Home Page in Settings. */
+const queryPage = cache(
+  async ({
+    locale,
+    slug,
+  }: {
+    locale: Awaited<ReturnType<typeof getLocale>>
+    slug?: string
+  }): Promise<PageType | null> => {
     const { isEnabled: draft } = await draftMode()
 
-    return findByLocalizedSlug<RequiredDataFromCollectionSlug<'pages'>>({
+    if (slug) {
+      return findByLocalizedSlug<PageType>({
+        collection: 'pages',
+        draft,
+        locale,
+        slug,
+      })
+    }
+
+    const homePageId = await getHomePageId()
+    if (!homePageId) return null
+
+    const payload = await getPayload({ config: configPromise })
+
+    return payload.findByID({
       collection: 'pages',
+      disableErrors: true,
       draft,
+      fallbackLocale: locale === defaultLocale ? false : defaultLocale,
+      id: homePageId,
       locale,
-      slug,
+      overrideAccess: draft,
     })
   },
 )
