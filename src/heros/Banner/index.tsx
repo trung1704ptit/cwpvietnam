@@ -36,7 +36,7 @@ export const BannerHero: React.FC<BannerHeroProps> = ({ links, media, richText, 
           />
         )}
       </div>
-      <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
+      <div className="absolute inset-0 bg-black/65" aria-hidden="true" />
       <div className="container relative z-10 flex items-center justify-center">
         <div className="w-full max-w-6xl text-center">
           {title && (

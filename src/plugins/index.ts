@@ -3,6 +3,7 @@ import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
@@ -14,7 +15,7 @@ import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
+  return doc?.title ? `${doc.title} | Cancer wellness program` : 'Cancer wellness program'
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
@@ -88,5 +89,23 @@ export const plugins: Plugin[] = [
         return [...defaultFields, ...searchFields]
       },
     },
+  }),
+  // Cloudflare R2 via its S3-compatible API. `@payloadcms/storage-r2` only supports Workers bucket bindings.
+  s3Storage({
+    alwaysInsertFields: true,
+    bucket: process.env.R2_BUCKET || '',
+    collections: {
+      media: true,
+    },
+    config: {
+      credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY || '',
+        secretAccessKey: process.env.R2_SECRET_KEY || '',
+      },
+      endpoint: process.env.R2_ENDPOINT,
+      forcePathStyle: true,
+      region: 'auto',
+    },
+    enabled: Boolean(process.env.R2_BUCKET),
   }),
 ]

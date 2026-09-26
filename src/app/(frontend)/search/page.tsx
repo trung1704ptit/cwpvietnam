@@ -78,7 +78,12 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
           <h1 className="mb-8 lg:mb-16">{t.search}</h1>
 
           <div className="max-w-[50rem] mx-auto">
-            <Search initialQuery={query || ''} live placeholder={t.searchPlaceholder} submitLabel={t.search} />
+            <Search
+              initialQuery={query || ''}
+              live
+              placeholder={t.searchPlaceholder}
+              submitLabel={t.search}
+            />
           </div>
         </div>
       </div>
@@ -94,6 +99,6 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Search`,
+    title: `Cancer wellness program Search`,
   }
 }

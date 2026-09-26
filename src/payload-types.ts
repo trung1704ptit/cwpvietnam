@@ -205,7 +205,7 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (CarouselBlock | CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -301,6 +301,7 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
+  _objectKey?: string | null;
   folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
@@ -463,6 +464,67 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CarouselBlock".
+ */
+export interface CarouselBlock {
+  autoplay?: boolean | null;
+  /**
+   * Seconds each slide is shown, unless the slide sets its own duration.
+   */
+  interval?: number | null;
+  slides: {
+    title: string;
+    text?: string | null;
+    /**
+     * Seconds this slide is shown before moving to the next one. Leave empty to use the carousel default (5s).
+     */
+    duration?: number | null;
+    backgroundType: 'image' | 'video';
+    backgroundImage?: (number | null) | Media;
+    /**
+     * Upload an MP4/WebM to Media. Plays muted, looped, full width and cropped to fill the slider. Takes priority over Video URL.
+     */
+    backgroundVideo?: (number | null) | Media;
+    /**
+     * Used when no video is uploaded: YouTube link (youtube.com/watch?v=…, youtu.be/…, shorts) or a direct MP4/WebM URL.
+     */
+    videoURL?: string | null;
+    /**
+     * Dark overlay percentage. Use 0 for no overlay.
+     */
+    overlayOpacity: number;
+    buttons?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: number | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+            /**
+             * Choose how the link should be rendered.
+             */
+            appearance?: ('default' | 'outline') | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'carousel';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1104,6 +1166,7 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        carousel?: T | CarouselBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
@@ -1123,6 +1186,44 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CarouselBlock_select".
+ */
+export interface CarouselBlockSelect<T extends boolean = true> {
+  autoplay?: T;
+  interval?: T;
+  slides?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        duration?: T;
+        backgroundType?: T;
+        backgroundImage?: T;
+        backgroundVideo?: T;
+        videoURL?: T;
+        overlayOpacity?: T;
+        buttons?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1248,6 +1349,7 @@ export interface PostsSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  _objectKey?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;
