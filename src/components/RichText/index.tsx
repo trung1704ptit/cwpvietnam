@@ -20,6 +20,7 @@ import type {
 } from '@/payload-types'
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { parseTextStyle } from '@/fields/fontStyle/shared'
 import { getTextStateStyle } from '@/fields/textState'
 import { cn } from '@/utilities/ui'
 
@@ -41,11 +42,13 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
   ...LinkJSXConverter({ internalDocToHref }),
   text: (args) => {
     const textConverter = defaultConverters.text
-    const converted =
-      typeof textConverter === 'function' ? textConverter(args) : textConverter
-    const style = getTextStateStyle(args.node as Parameters<typeof getTextStateStyle>[0])
+    const converted = typeof textConverter === 'function' ? textConverter(args) : textConverter
+    const legacyStyle = getTextStateStyle(args.node as Parameters<typeof getTextStateStyle>[0])
+    const inlineStyle = parseTextStyle(args.node.style)
 
-    if (!style || converted == null) return converted
+    if ((!legacyStyle && !inlineStyle) || converted == null) return converted
+
+    const style = { ...legacyStyle, ...inlineStyle }
 
     return <span style={style}>{converted}</span>
   },

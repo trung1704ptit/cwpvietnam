@@ -419,7 +419,21 @@ export interface CarouselBlock {
   interval?: number | null;
   slides: {
     title: string;
-    text?: string | null;
+    text?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
     /**
      * Seconds this slide is shown before moving to the next one. Leave empty to use the carousel default (5s).
      */

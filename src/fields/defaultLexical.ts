@@ -19,7 +19,6 @@ import {
   StrikethroughFeature,
   SubscriptFeature,
   SuperscriptFeature,
-  TextStateFeature,
   UnderlineFeature,
   UnorderedListFeature,
   UploadFeature,
@@ -27,7 +26,7 @@ import {
   type LinkFields,
 } from '@payloadcms/richtext-lexical'
 
-import { textState } from '@/fields/textState'
+import { FontStyleFeature } from '@/fields/fontStyle/feature.server'
 
 export const defaultLexical = lexicalEditor({
   features: [
@@ -81,9 +80,7 @@ export const defaultLexical = lexicalEditor({
         ]
       },
     }),
-    TextStateFeature({
-      state: textState,
-    }),
+    FontStyleFeature(),
     EXPERIMENTAL_TableFeature(),
     InlineToolbarFeature(),
     FixedToolbarFeature(),

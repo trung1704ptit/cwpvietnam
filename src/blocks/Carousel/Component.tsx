@@ -7,6 +7,7 @@ import type { CarouselBlock as CarouselBlockProps } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
+import RichText from '@/components/RichText'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 import { cn } from '@/utilities/ui'
 
@@ -151,13 +152,16 @@ export const CarouselBlock: React.FC<CarouselBlockProps> = ({
 
       <div className="container absolute inset-0 z-10 grid grid-rows-[1fr_auto_2fr] justify-items-center px-12 text-center sm:px-20">
         <div className="row-start-2 max-w-4xl">
-          <h2 className="text-xl font-medium leading-tight tracking-tight sm:text-3xl md:text-5xl">
+          <h2 className="text-xl font-medium leading-tight tracking-tight sm:text-4xl md:text-6xl">
             {activeSlide.title}
           </h2>
           {activeSlide.text && (
-            <p className="mx-auto mt-2 line-clamp-2 max-w-2xl text-sm leading-relaxed text-white/90 sm:mt-5 sm:line-clamp-none sm:text-base md:text-lg">
-              {activeSlide.text}
-            </p>
+            <RichText
+              className="mx-auto mt-2 line-clamp-2 max-w-2xl text-sm leading-relaxed sm:mt-5 sm:line-clamp-none sm:text-base md:text-lg [&_a]:underline [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-2 [&_ul]:list-inside [&_ul]:list-disc"
+              data={activeSlide.text}
+              enableGutter={false}
+              enableProse={false}
+            />
           )}
           {activeSlide.buttons?.[0]?.link && (
             <div className="mt-3 flex justify-center sm:mt-8">

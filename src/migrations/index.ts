@@ -6,6 +6,7 @@ import * as migration_20260926_031404_add_carousel_slide_duration from './202609
 import * as migration_20260926_083100_add_media_object_key from './20260926_083100_add_media_object_key';
 import * as migration_20260926_091226_remove_media_image_sizes from './20260926_091226_remove_media_image_sizes';
 import * as migration_20260926_093156_add_settings_home_page from './20260926_093156_add_settings_home_page';
+import * as migration_20260926_094327_carousel_text_rich_text from './20260926_094327_carousel_text_rich_text';
 
 export const migrations = [
   {
@@ -46,6 +47,11 @@ export const migrations = [
   {
     up: migration_20260926_093156_add_settings_home_page.up,
     down: migration_20260926_093156_add_settings_home_page.down,
-    name: '20260926_093156_add_settings_home_page'
+    name: '20260926_093156_add_settings_home_page',
+  },
+  {
+    up: migration_20260926_094327_carousel_text_rich_text.up,
+    down: migration_20260926_094327_carousel_text_rich_text.down,
+    name: '20260926_094327_carousel_text_rich_text'
   },
 ];

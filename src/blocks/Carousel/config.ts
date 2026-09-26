@@ -41,7 +41,7 @@ export const Carousel: Block = {
         },
         {
           name: 'text',
-          type: 'textarea',
+          type: 'richText',
           localized: true,
         },
         {
