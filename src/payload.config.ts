@@ -9,6 +9,7 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Tags } from './collections/Tags'
+import { TeamMembers } from './collections/TeamMembers'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -67,7 +68,7 @@ export default buildConfig({
     // Use committed migrations instead of interactive Drizzle push (avoids rename prompts).
     push: false,
   }),
-  collections: [Pages, Posts, Media, Categories, Tags, Users],
+  collections: [Pages, Posts, Media, Categories, Tags, TeamMembers, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, Settings],
   localization: {

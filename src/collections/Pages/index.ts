@@ -8,6 +8,7 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { Team } from '../../blocks/Team/config'
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
 import { draftEditComponents } from '@/collections/draftEditComponents'
@@ -76,7 +77,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [Carousel, CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [Carousel, CallToAction, Content, MediaBlock, Archive, FormBlock, Team],
               required: true,
               admin: {
                 initCollapsed: true,
