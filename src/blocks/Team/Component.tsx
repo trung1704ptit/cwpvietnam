@@ -1,25 +1,15 @@
 import type { TeamBlock as TeamBlockProps, TeamMember } from '@/payload-types'
 
 import configPromise from '@payload-config'
+import { ChevronDown } from 'lucide-react'
 import { getPayload } from 'payload'
 import React from 'react'
 
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
+import { getMessages, type Messages } from '@/i18n/messages'
 import { getLocale } from '@/utilities/getLocale'
 import { cn } from '@/utilities/ui'
-
-const gridColumns: Record<NonNullable<TeamBlockProps['columns']>, string> = {
-  '2': 'sm:grid-cols-2',
-  '3': 'sm:grid-cols-2 lg:grid-cols-3',
-  '4': 'sm:grid-cols-2 lg:grid-cols-4',
-}
-
-const imageSizes: Record<NonNullable<TeamBlockProps['columns']>, string> = {
-  '2': '(min-width: 640px) 50vw, 100vw',
-  '3': '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw',
-  '4': '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw',
-}
 
 const getInitials = (name?: string | null) => {
   const words = name?.trim().split(/\s+/).filter(Boolean) ?? []
@@ -29,33 +19,33 @@ const getInitials = (name?: string | null) => {
   return (first + last).toUpperCase()
 }
 
-const TeamMemberCard: React.FC<{ member: TeamMember; sizes: string }> = ({ member, sizes }) => {
+const TeamMemberRow: React.FC<{ member: TeamMember; t: Messages }> = ({ member, t }) => {
   const { description, fullName, image, name, position } = member
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-border text-card-foreground shadow-sm transition-shadow hover:shadow-md">
-      <div className="h-56 relative aspect-[1/1] overflow-hidden bg-muted">
+    <article className="flex items-start gap-5 rounded-xl border border-border bg-white p-5 text-card-foreground shadow-sm transition-shadow hover:shadow-md sm:gap-8 sm:p-6 dark:bg-card">
+      <div className="relative size-20 shrink-0 overflow-hidden rounded-full bg-muted ring-4 ring-primary/10 sm:size-28">
         {image && typeof image === 'object' ? (
           <Media
             alt={name ?? undefined}
             fill
-            imgClassName="h-56 object-cover transition-transform duration-500 group-hover:scale-105"
+            imgClassName="object-cover"
             resource={image}
-            size="160px"
+            size="112px"
           />
         ) : (
           <div
             aria-hidden="true"
-            className="flex h-full items-center justify-center bg-primary/10 text-5xl font-bold text-primary"
+            className="flex h-full items-center justify-center bg-primary/10 text-2xl font-bold text-primary sm:text-3xl"
           >
             {getInitials(name)}
           </div>
         )}
       </div>
 
-      <div className="flex flex-1 flex-col p-6">
+      <div className="min-w-0 flex-1">
         <RichText
-          className="text-xl font-bold leading-snug [&_p+p]:mt-1"
+          className="text-lg font-bold leading-snug sm:text-xl [&_p+p]:mt-1"
           data={fullName}
           enableGutter={false}
           enableProse={false}
@@ -66,12 +56,22 @@ const TeamMemberCard: React.FC<{ member: TeamMember; sizes: string }> = ({ membe
           </p>
         )}
         {description && (
-          <RichText
-            className="mt-4 border-t border-border pt-4 text-base leading-relaxed text-muted-foreground [&_a]:text-primary [&_a]:underline [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-3 [&_ul]:list-inside [&_ul]:list-disc"
-            data={description}
-            enableGutter={false}
-            enableProse={false}
-          />
+          <details className="group/details mt-3">
+            <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-primary hover:underline [&::-webkit-details-marker]:hidden">
+              <span className="group-open/details:hidden">{t.showDetails}</span>
+              <span className="hidden group-open/details:inline">{t.hideDetails}</span>
+              <ChevronDown
+                aria-hidden="true"
+                className="size-4 transition-transform group-open/details:rotate-180"
+              />
+            </summary>
+            <RichText
+              className="mt-3 border-t border-border pt-3 text-base leading-relaxed text-muted-foreground [&_a]:text-primary [&_a]:underline [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-3 [&_ul]:list-inside [&_ul]:list-disc"
+              data={description}
+              enableGutter={false}
+              enableProse={false}
+            />
+          </details>
         )}
       </div>
     </article>
@@ -79,7 +79,9 @@ const TeamMemberCard: React.FC<{ member: TeamMember; sizes: string }> = ({ membe
 }
 
 export const TeamBlock: React.FC<TeamBlockProps & { id?: string }> = async (props) => {
-  const { id, columns, introContent, members: selectedMembers, populateBy } = props
+  const { id, introContent, members: selectedMembers, populateBy } = props
+  const locale = await getLocale()
+  const t = getMessages(locale)
 
   let members: TeamMember[] = []
 
@@ -92,7 +94,7 @@ export const TeamBlock: React.FC<TeamBlockProps & { id?: string }> = async (prop
     const { docs } = await payload.find({
       collection: 'team-members',
       depth: 1,
-      locale: await getLocale(),
+      locale,
       pagination: false,
       sort: '_order',
       where: { active: { equals: true } },
@@ -102,23 +104,19 @@ export const TeamBlock: React.FC<TeamBlockProps & { id?: string }> = async (prop
 
   if (!members.length && !introContent) return null
 
-  const columnCount = columns ?? '3'
-
   return (
     <section className="container my-16" id={`block-${id}`}>
       {introContent && (
-        <RichText
-          className="mx-auto mb-12 max-w-3xl text-center"
-          data={introContent}
-          enableGutter={false}
-        />
+        <RichText className="mx-auto max-w-4xl" data={introContent} enableGutter={false} />
       )}
       {members.length > 0 && (
-        <div className={cn('grid grid-cols-1 gap-6 lg:gap-8', gridColumns[columnCount])}>
+        <ul className={cn('mx-auto max-w-4xl space-y-4', introContent && 'mt-6')}>
           {members.map((member) => (
-            <TeamMemberCard key={member.id} member={member} sizes={imageSizes[columnCount]} />
+            <li key={member.id}>
+              <TeamMemberRow member={member} t={t} />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </section>
   )
