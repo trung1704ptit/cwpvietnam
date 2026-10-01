@@ -6,7 +6,9 @@ import { Archive } from '../../blocks/ArchiveBlock/config'
 import { Carousel } from '../../blocks/Carousel/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
+import { FeatureBlock } from '../../blocks/FeatureBlock/config'
 import { FormBlock } from '../../blocks/Form/config'
+import { HomePartners } from '../../blocks/HomePartners/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { Team } from '../../blocks/Team/config'
 import { hero } from '@/heros/config'
@@ -77,7 +79,17 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [Carousel, CallToAction, Content, MediaBlock, Archive, FormBlock, Team],
+              blocks: [
+                Carousel,
+                CallToAction,
+                Content,
+                MediaBlock,
+                Archive,
+                FormBlock,
+                Team,
+                HomePartners,
+                FeatureBlock,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,

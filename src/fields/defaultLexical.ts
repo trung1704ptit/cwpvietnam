@@ -2,6 +2,7 @@ import type { TextFieldSingleValidation } from 'payload'
 import {
   AlignFeature,
   BlockquoteFeature,
+  BlocksFeature,
   BoldFeature,
   ChecklistFeature,
   EXPERIMENTAL_TableFeature,
@@ -26,6 +27,7 @@ import {
   type LinkFields,
 } from '@payloadcms/richtext-lexical'
 
+import { VideoBlock } from '@/blocks/VideoBlock/config'
 import { FontStyleFeature } from '@/fields/fontStyle/feature.server'
 
 export const defaultLexical = lexicalEditor({
@@ -49,6 +51,7 @@ export const defaultLexical = lexicalEditor({
     UploadFeature({
       enabledCollections: ['media'],
     }),
+    BlocksFeature({ blocks: [VideoBlock] }),
     RelationshipFeature({
       enabledCollections: ['pages', 'posts'],
     }),

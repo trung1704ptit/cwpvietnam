@@ -6,7 +6,9 @@ import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CarouselBlock } from '@/blocks/Carousel/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { FeatureBlock } from '@/blocks/FeatureBlock/Component'
 import { FormBlock } from '@/blocks/Form/Component'
+import { HomePartnersBlock } from '@/blocks/HomePartners/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { TeamBlock } from '@/blocks/Team/Component'
 
@@ -15,7 +17,9 @@ const blockComponents = {
   carousel: CarouselBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
+  featureBlock: FeatureBlock,
   formBlock: FormBlock,
+  homePartners: HomePartnersBlock,
   mediaBlock: MediaBlock,
   team: TeamBlock,
 }
