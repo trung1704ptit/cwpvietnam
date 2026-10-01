@@ -95,6 +95,9 @@ importers:
       react-hook-form:
         specifier: 7.71.1
         version: 7.71.1(react@19.2.6)
+      react-icons:
+        specifier: ^5.7.0
+        version: 5.7.0(react@19.2.6)
       sharp:
         specifier: 0.35.4
         version: 0.35.4(@types/node@22.19.9)
@@ -4383,6 +4386,11 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
+
+  react-icons@5.7.0:
+    resolution: {integrity: sha512-LBLy340Rzqy6+/yVhZKT3B/QpP1BZaesGqasf09HPOBzRarcDIFH0WwXlXQfE7q7ipxK4MSiC5DIBWURCny6fw==}
+    peerDependencies:
+      react: '*'
 
   react-image-crop@10.1.8:
     resolution: {integrity: sha512-4rb8XtXNx7ZaOZarKKnckgz4xLMvds/YrU6mpJfGhGAsy2Mg4mIw1x+DCCGngVGq2soTBVVOxx2s/C6mTX9+pA==}
@@ -9711,6 +9719,10 @@ snapshots:
       react: 19.2.6
 
   react-hook-form@7.71.1(react@19.2.6):
+    dependencies:
+      react: 19.2.6
+
+  react-icons@5.7.0(react@19.2.6):
     dependencies:
       react: 19.2.6
 

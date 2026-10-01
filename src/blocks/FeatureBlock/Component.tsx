@@ -2,6 +2,7 @@ import type { FeatureBlock as FeatureBlockProps, Media as MediaType } from '@/pa
 
 import React from 'react'
 
+import { DynamicIcon } from '@/components/DynamicIcon'
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
@@ -95,16 +96,27 @@ export const FeatureBlock: React.FC<FeatureBlockProps> = ({
       {items && items.length > 0 && (
         <ul className="flex flex-wrap justify-center gap-6">
           {items.map((item, index) => {
-            const media = item.media && typeof item.media === 'object' ? item.media : null
+            const isIcon = item.mediaType === 'icon'
+            const media =
+              !isIcon && item.media && typeof item.media === 'object' ? item.media : null
 
             return (
               <li className={cn('w-full', itemWidths[columnCount])} key={item.id ?? index}>
                 <article
                   className={cn(
-                    'flex h-full flex-col rounded-2xl border-4 border-primary/10 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg dark:bg-card',
+                    'flex h-full flex-col rounded-2xl bg-white p-6 shadow-[0_10px_32px_-10px_rgb(0_0_0/0.3)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_48px_-14px_rgb(0_0_0/0.4)] dark:bg-card',
                     isCenter ? 'items-center text-center' : 'items-start text-left',
                   )}
                 >
+                  {isIcon && item.icon && (
+                    <DynamicIcon
+                      aria-hidden="true"
+                      className={cn('mb-6 shrink-0', !item.iconColor && 'text-primary')}
+                      color={item.iconColor || undefined}
+                      size={item.iconSize ?? 48}
+                      value={item.icon}
+                    />
+                  )}
                   {media && (
                     <FeatureMedia align={align} item={item} media={media} sizes={mediaSizes} />
                   )}

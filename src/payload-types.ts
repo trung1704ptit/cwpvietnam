@@ -1005,6 +1005,13 @@ export interface FeatureBlock {
   align: 'left' | 'center';
   items?:
     | {
+        mediaType?: ('image' | 'icon') | null;
+        icon?: string | null;
+        /**
+         * Leave empty to use the primary color.
+         */
+        iconColor?: string | null;
+        iconSize?: number | null;
         media?: (number | null) | Media;
         mediaSize?: ('custom' | 'full') | null;
         mediaWidth?: number | null;
@@ -1596,6 +1603,10 @@ export interface FeatureBlockSelect<T extends boolean = true> {
   items?:
     | T
     | {
+        mediaType?: T;
+        icon?: T;
+        iconColor?: T;
+        iconSize?: T;
         media?: T;
         mediaSize?: T;
         mediaWidth?: T;

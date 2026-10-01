@@ -1,6 +1,11 @@
-import type { Block } from 'payload'
+import type { Block, TextFieldSingleValidation } from 'payload'
 
 import { link } from '@/fields/link'
+
+const HEX_COLOR = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
+
+const isIcon = (siblingData: unknown) =>
+  (siblingData as { mediaType?: string } | undefined)?.mediaType === 'icon'
 
 export const FeatureBlock: Block = {
   slug: 'featureBlock',
@@ -51,18 +56,81 @@ export const FeatureBlock: Block = {
       },
       fields: [
         {
+          name: 'mediaType',
+          type: 'radio',
+          admin: {
+            layout: 'horizontal',
+          },
+          defaultValue: 'image',
+          label: 'Visual',
+          options: [
+            { label: 'Image', value: 'image' },
+            { label: 'Icon', value: 'icon' },
+          ],
+        },
+        {
+          name: 'icon',
+          type: 'text',
+          admin: {
+            components: {
+              Field: '@/fields/icon/IconPickerField#IconPickerField',
+            },
+            condition: (_, siblingData) => isIcon(siblingData),
+          },
+        },
+        {
+          type: 'row',
+          admin: {
+            condition: (_, siblingData) => isIcon(siblingData),
+          },
+          fields: [
+            {
+              name: 'iconColor',
+              type: 'text',
+              admin: {
+                components: {
+                  Field: '@/fields/color/ColorPickerField#ColorPickerField',
+                },
+                description: 'Leave empty to use the primary color.',
+                placeholder: 'Primary color',
+                width: '50%',
+              },
+              label: 'Icon color',
+              validate: ((value) =>
+                !value || HEX_COLOR.test(value)
+                  ? true
+                  : 'Use a hex color, e.g. #dd3e60') as TextFieldSingleValidation,
+            },
+            {
+              name: 'iconSize',
+              type: 'number',
+              admin: {
+                step: 4,
+                width: '50%',
+              },
+              defaultValue: 48,
+              label: 'Icon size (px)',
+              max: 256,
+              min: 12,
+            },
+          ],
+        },
+        {
           name: 'media',
           type: 'upload',
+          admin: {
+            condition: (_, siblingData) => !isIcon(siblingData),
+          },
           filterOptions: {
             mimeType: { contains: 'image' },
           },
-          label: 'Icon / image',
+          label: 'Image',
           relationTo: 'media',
         },
         {
           type: 'row',
           admin: {
-            condition: (_, siblingData) => Boolean(siblingData?.media),
+            condition: (_, siblingData) => !isIcon(siblingData) && Boolean(siblingData?.media),
           },
           fields: [
             {
