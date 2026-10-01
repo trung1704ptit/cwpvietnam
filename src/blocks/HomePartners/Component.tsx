@@ -68,7 +68,7 @@ export const HomePartnersBlock: React.FC<HomePartnersBlockProps> = ({
               >
                 {column.map(({ id, image }, index) => (
                   <div
-                    className="group relative overflow-hidden rounded-2xl border-4 border-white bg-muted shadow-[0_16px_40px_-16px_rgb(0_0_0/0.35)] dark:border-card"
+                    className="group relative overflow-hidden rounded-2xl bg-muted shadow-[0_16px_40px_-16px_rgb(0_0_0/0.35)]"
                     key={id ?? index}
                     style={{ aspectRatio: `1 / ${getHeightRatio(imageAspect, image)}` }}
                   >
