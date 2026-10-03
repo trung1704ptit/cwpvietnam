@@ -5,6 +5,7 @@ import React from 'react'
 
 import { fontVariableClassNames, siteFonts } from './fonts'
 import { AdminBar } from '@/components/AdminBar'
+import { NavigationProgress } from '@/components/NavigationProgress'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
@@ -68,6 +69,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body className="font-sans antialiased">
+        <NavigationProgress />
         <Providers>
           <AdminBar
             adminBarProps={{

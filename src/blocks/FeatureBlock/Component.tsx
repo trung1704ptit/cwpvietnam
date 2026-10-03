@@ -39,8 +39,8 @@ const FeatureMedia: React.FC<{
   return (
     <div
       className={cn(
-        'relative mb-6 shrink-0 overflow-hidden',
-        isFull ? 'w-full rounded-xl' : align === 'center' && 'mx-auto',
+        'relative isolate mb-6 w-full max-w-full shrink-0 overflow-hidden rounded-xl',
+        !isFull && align === 'center' && 'mx-auto',
       )}
       style={style}
     >
@@ -55,6 +55,7 @@ const FeatureMedia: React.FC<{
       ) : (
         <Media
           fill
+          className="absolute inset-0 size-full"
           imgClassName={isFull ? 'object-cover' : 'object-contain'}
           resource={media}
           size={isFull ? sizes : `${width}px`}

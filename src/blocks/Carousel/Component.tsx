@@ -1,7 +1,7 @@
 'use client'
 
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useId, useState } from 'react'
 
 import type { CarouselBlock as CarouselBlockProps } from '@/payload-types'
 
@@ -70,7 +70,7 @@ const SlideBackground: React.FC<{ priority: boolean; slide: Slide }> = ({ priori
         <iframe
           allow="autoplay; encrypted-media; picture-in-picture"
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 aspect-video w-full -translate-x-1/2 -translate-y-1/2"
+          className="pointer-events-none absolute left-1/2 top-1/2 aspect-video h-full min-h-full w-auto min-w-full -translate-x-1/2 -translate-y-1/2"
           src={`https://www.youtube-nocookie.com/embed/${youTubeId}?${params}`}
           tabIndex={-1}
           title={slide.title}
@@ -98,20 +98,33 @@ const SlideBackground: React.FC<{ priority: boolean; slide: Slide }> = ({ priori
   return (
     <Media
       fill
-      className="size-full"
+      className="absolute inset-0 size-full"
       imgClassName="object-cover"
-      pictureClassName="relative block size-full"
       priority={priority}
       resource={slide.backgroundImage}
     />
   )
 }
 
+const mobileHeights: Record<NonNullable<CarouselBlockProps['mobileHeight']>, string> = {
+  '100vh': '100dvh',
+  '480': '480px',
+  '640': '640px',
+  '70vh': '70dvh',
+  '85vh': '85dvh',
+  aspect: 'auto',
+}
+
 export const CarouselBlock: React.FC<CarouselBlockProps> = ({
   autoplay = true,
+  id,
   interval = 5,
+  mobileHeight = '70vh',
   slides,
 }) => {
+  const reactId = useId().replace(/:/g, '')
+  const carouselId = (id || reactId).replace(/[^a-zA-Z0-9_-]/g, '')
+  const mobileHeightValue = mobileHeights[mobileHeight ?? '70vh'] ?? mobileHeights['70vh']
   const [activeIndex, setActiveIndex] = useState(0)
   const slideCount = slides?.length ?? 0
   const activeDuration = slides?.[activeIndex]?.duration ?? interval ?? 5
@@ -134,12 +147,19 @@ export const CarouselBlock: React.FC<CarouselBlockProps> = ({
 
   const goTo = (index: number) => setActiveIndex((index + slideCount) % slideCount)
 
+  const mobileHeightCss =
+    mobileHeightValue === 'auto'
+      ? `@media (width < 48rem){[data-carousel="${carouselId}"]{aspect-ratio:16/9}}`
+      : `@media (width < 48rem){[data-carousel="${carouselId}"]{height:${mobileHeightValue}}}`
+
   return (
     <section
       aria-label="Carousel"
       aria-roledescription="carousel"
-      className="relative aspect-video w-full overflow-hidden bg-black text-white md:aspect-[23/9]"
+      className="relative w-full overflow-hidden bg-black text-white md:aspect-[23/9]"
+      data-carousel={carouselId}
     >
+      <style dangerouslySetInnerHTML={{ __html: mobileHeightCss }} />
       <div className="absolute inset-0" key={activeSlide.id ?? activeIndex}>
         <SlideBackground priority={activeIndex === 0} slide={activeSlide} />
       </div>

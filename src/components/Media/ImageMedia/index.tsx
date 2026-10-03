@@ -84,17 +84,20 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         .map(([, value]) => `(max-width: ${value}px) ${value * 2}w`)
         .join(', ')
 
+  // `fill` takes the image out of flow and covers the nearest positioned ancestor.
+  // object-fit only crops once the img box itself has a fixed size.
+  const covers = fill && !imgClassName?.includes('object-contain')
+
   return (
-    <picture className={cn(pictureClassName)}>
+    <picture className={cn(fill && 'block size-full', pictureClassName)}>
       <img
         alt={alt || ''}
-        className={cn(imgClassName, 'w-full')}
-        // fill={fill}
+        className={cn(
+          fill ? 'absolute inset-0 size-full' : 'h-auto w-full max-w-full',
+          covers && 'object-cover',
+          imgClassName,
+        )}
         height={!fill ? height : undefined}
-        // placeholder="blur"
-        // blurDataURL={placeholderBlur}
-        // priority={priority}
-        // quality={100}
         loading={loading}
         sizes={sizes}
         src={src as string}

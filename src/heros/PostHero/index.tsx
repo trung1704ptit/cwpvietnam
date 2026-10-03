@@ -16,15 +16,14 @@ export const PostHero: React.FC<{
 
   return (
     <div
-      className="relative flex h-[380px] max-h-[380px] items-center justify-center overflow-hidden text-white"
+      className="relative flex min-h-[260px] items-center justify-center overflow-hidden text-white sm:min-h-[320px] md:h-[380px] md:max-h-[380px]"
       data-theme="dark"
     >
       <div className="absolute inset-0 select-none">
         {heroImage && typeof heroImage === 'object' && (
           <Media
             fill
-            className="h-full"
-            pictureClassName="relative block h-full w-full"
+            className="absolute inset-0 size-full"
             imgClassName="object-cover"
             priority
             resource={heroImage}
@@ -32,7 +31,7 @@ export const PostHero: React.FC<{
         )}
       </div>
       <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
-      <div className="container relative z-10 flex justify-center">
+      <div className="container relative z-10 flex justify-center py-12 md:py-0">
         <div className="w-full max-w-4xl text-center">
           <div className="uppercase text-sm mb-6">
             {categories?.map((category, index) => {

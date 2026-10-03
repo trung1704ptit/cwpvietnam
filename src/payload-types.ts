@@ -430,6 +430,10 @@ export interface CarouselBlock {
    * Seconds each slide is shown, unless the slide sets its own duration.
    */
   interval?: number | null;
+  /**
+   * Height of the carousel on screens smaller than 768px. Desktop keeps the wide banner ratio.
+   */
+  mobileHeight?: ('aspect' | '480' | '640' | '70vh' | '85vh' | '100vh') | null;
   slides: {
     title: string;
     text?: {
@@ -1508,6 +1512,7 @@ export interface PagesSelect<T extends boolean = true> {
 export interface CarouselBlockSelect<T extends boolean = true> {
   autoplay?: T;
   interval?: T;
+  mobileHeight?: T;
   slides?:
     | T
     | {

@@ -16,6 +16,7 @@ import * as migration_20261003_023017_feature_block_media_size_default from './2
 import * as migration_20261003_024024_settings_typography from './20261003_024024_settings_typography';
 import * as migration_20261003_024100_hero_type_default_high_impact from './20261003_024100_hero_type_default_high_impact';
 import * as migration_20261003_030436_contact_block from './20261003_030436_contact_block';
+import * as migration_20261003_035202_carousel_mobile_height from './20261003_035202_carousel_mobile_height';
 
 export const migrations = [
   {
@@ -106,6 +107,11 @@ export const migrations = [
   {
     up: migration_20261003_030436_contact_block.up,
     down: migration_20261003_030436_contact_block.down,
-    name: '20261003_030436_contact_block'
+    name: '20261003_030436_contact_block',
+  },
+  {
+    up: migration_20261003_035202_carousel_mobile_height.up,
+    down: migration_20261003_035202_carousel_mobile_height.down,
+    name: '20261003_035202_carousel_mobile_height'
   },
 ];

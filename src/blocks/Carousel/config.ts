@@ -30,6 +30,23 @@ export const Carousel: Block = {
       min: 2,
     },
     {
+      name: 'mobileHeight',
+      type: 'select',
+      admin: {
+        description: 'Height of the carousel on screens smaller than 768px. Desktop keeps the wide banner ratio.',
+      },
+      defaultValue: '70vh',
+      label: 'Mobile height',
+      options: [
+        { label: 'Compact (16:9)', value: 'aspect' },
+        { label: 'Medium (480px)', value: '480' },
+        { label: 'Tall (640px)', value: '640' },
+        { label: '70% of screen', value: '70vh' },
+        { label: '85% of screen', value: '85vh' },
+        { label: 'Full screen', value: '100vh' },
+      ],
+    },
+    {
       name: 'slides',
       type: 'array',
       fields: [
