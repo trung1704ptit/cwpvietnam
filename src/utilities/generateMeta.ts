@@ -19,14 +19,16 @@ const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
 
 export const generateMeta = async (args: {
   doc: Partial<Page> | Partial<Post> | null
+  /** Falls back to the plain site title instead of the page title. */
+  isHomePage?: boolean
 }): Promise<Metadata> => {
-  const { doc } = args
+  const { doc, isHomePage } = args
 
   const ogImage = getImageURL(doc?.meta?.image)
 
-  const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Cancer wellness program'
-    : 'Cancer wellness program'
+  // The root layout's title template appends the site title from Settings.
+  const title =
+    doc?.meta?.title?.trim() || (isHomePage ? undefined : doc?.title?.trim()) || undefined
 
   return {
     description: doc?.meta?.description,
@@ -39,9 +41,10 @@ export const generateMeta = async (args: {
             },
           ]
         : undefined,
-      title,
+      ...(title ? { title } : {}),
       url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
     }),
-    title,
+    // An explicit `undefined` would also drop the layout's default title.
+    ...(title ? { title } : {}),
   }
 }

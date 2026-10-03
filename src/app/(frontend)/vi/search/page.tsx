@@ -1,4 +1,4 @@
-import { createSearchRoute, generateMetadata } from '@/app/(frontend)/_views/SearchView'
+import { createSearchMetadata, createSearchRoute } from '@/app/(frontend)/_views/SearchView'
 
 export default createSearchRoute('vi')
-export { generateMetadata }
+export const generateMetadata = createSearchMetadata('vi')

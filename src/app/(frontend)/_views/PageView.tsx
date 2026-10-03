@@ -102,7 +102,7 @@ export const createPageRoute = (locale: Locale) => {
     const { slug } = await paramsPromise
     const page = await queryPage({ locale, slug: decodeSlug(slug) })
 
-    return generateMeta({ doc: page })
+    return generateMeta({ doc: page, isHomePage: !slug })
   }
 
   async function generateStaticParams() {

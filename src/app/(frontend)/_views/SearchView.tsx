@@ -97,8 +97,8 @@ export const createSearchRoute = (locale: Locale) =>
     )
   }
 
-export function generateMetadata(): Metadata {
-  return {
-    title: `Cancer wellness program Search`,
-  }
-}
+export const createSearchMetadata =
+  (locale: Locale) =>
+  (): Metadata => ({
+    title: getMessages(locale).search,
+  })

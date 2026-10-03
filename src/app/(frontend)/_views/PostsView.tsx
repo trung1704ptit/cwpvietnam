@@ -94,10 +94,9 @@ export const createPostsRoute = (locale: Locale) => {
 
   async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
     const { pageNumber } = await paramsPromise
+    const t = getMessages(locale)
     return {
-      title: pageNumber
-        ? `Cancer wellness program Posts Page ${pageNumber}`
-        : `Cancer wellness program Posts`,
+      title: pageNumber && pageNumber !== '1' ? `${t.posts} – ${pageNumber}` : t.posts,
     }
   }
 

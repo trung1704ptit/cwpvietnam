@@ -20,9 +20,8 @@ import { localizePath } from '@/i18n/paths'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
-const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Cancer wellness program` : 'Cancer wellness program'
-}
+// The site title is appended by the frontend's title template.
+const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => doc?.title || ''
 
 const generateURL: GenerateURL<Post | Page> = ({ collectionConfig, doc, locale }) => {
   const url = getServerSideURL()
