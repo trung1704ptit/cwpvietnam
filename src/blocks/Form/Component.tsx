@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 
 import { fields } from './fields'
+import { localizePath } from '@/i18n/paths'
+import { useLocale } from '@/i18n/useLocale'
 import { getClientSideURL } from '@/utilities/getURL'
 
 export type FormBlockType = {
@@ -45,6 +47,7 @@ export const FormBlock: React.FC<
   const [hasSubmitted, setHasSubmitted] = useState<boolean>()
   const [error, setError] = useState<{ message: string; status?: string } | undefined>()
   const router = useRouter()
+  const locale = useLocale()
 
   const onSubmit = useCallback(
     (data: FormFieldBlock[]) => {
@@ -97,7 +100,7 @@ export const FormBlock: React.FC<
 
             const redirectUrl = url
 
-            if (redirectUrl) router.push(redirectUrl)
+            if (redirectUrl) router.push(localizePath(redirectUrl, locale))
           }
         } catch (err) {
           console.warn(err)
@@ -110,7 +113,7 @@ export const FormBlock: React.FC<
 
       void submitForm()
     },
-    [router, formID, redirect, confirmationType],
+    [router, formID, redirect, confirmationType, locale],
   )
 
   return (

@@ -4,45 +4,60 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import RichText from '@/components/RichText'
-import { getLocale } from '@/utilities/getLocale'
+import type { Locale } from '@/i18n/config'
+import { cacheQuery, POSTS_LIST_TAG } from '@/utilities/pageCache'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
     id?: string
+    locale: Locale
   }
 > = async (props) => {
-  const { id, categories, introContent, limit: limitFromProps, populateBy, selectedDocs } = props
+  const {
+    id,
+    categories,
+    introContent,
+    limit: limitFromProps,
+    locale,
+    populateBy,
+    selectedDocs,
+  } = props
 
   const limit = limitFromProps || 3
 
   let posts: Post[] = []
 
   if (populateBy === 'collection') {
-    const payload = await getPayload({ config: configPromise })
-    const locale = await getLocale()
-
     const flattenedCategories = categories?.map((category) => {
       if (typeof category === 'object') return category.id
       else return category
     })
 
-    const fetchedPosts = await payload.find({
-      collection: 'posts',
-      depth: 1,
-      limit,
-      locale,
-      ...(flattenedCategories && flattenedCategories.length > 0
-        ? {
-            where: {
-              categories: {
-                in: flattenedCategories,
-              },
-            },
-          }
-        : {}),
-    })
+    const fetchedPosts = await cacheQuery(
+      async () => {
+        const payload = await getPayload({ config: configPromise })
+
+        return payload.find({
+          collection: 'posts',
+          depth: 1,
+          limit,
+          locale,
+          ...(flattenedCategories && flattenedCategories.length > 0
+            ? {
+                where: {
+                  categories: {
+                    in: flattenedCategories,
+                  },
+                },
+              }
+            : {}),
+        })
+      },
+      ['archive-posts', locale, String(limit), (flattenedCategories ?? []).join(',')],
+      [POSTS_LIST_TAG],
+    )
 
     posts = fetchedPosts.docs
   } else {

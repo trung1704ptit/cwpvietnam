@@ -72,7 +72,7 @@ export default buildConfig({
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, Settings],
   localization: {
-    defaultLocale: 'vi',
+    defaultLocale: 'en',
     fallback: true,
     locales: [
       {

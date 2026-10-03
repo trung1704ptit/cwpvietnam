@@ -1,10 +1,11 @@
 'use client'
 
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { isLocale, localeLabels, locales, type Locale } from '@/i18n/config'
+import { localizePath } from '@/i18n/paths'
 import { cn } from '@/utilities/ui'
 
 const localeFlags: Record<Locale, string> = {
@@ -17,16 +18,12 @@ export const LocaleSwitcher: React.FC<{
   locale: Locale
 }> = ({ className, locale }) => {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
 
   const onChange = (value: string) => {
     if (!isLocale(value) || value === locale) return
 
-    const params = new URLSearchParams(searchParams.toString())
-    params.set('locale', value)
-    const url = new URL(pathname, window.location.origin)
-    url.search = params.toString()
-    window.location.assign(url.toString())
+    // Full navigation: each locale has its own root layout.
+    window.location.assign(localizePath(pathname, value) + window.location.search)
   }
 
   return (

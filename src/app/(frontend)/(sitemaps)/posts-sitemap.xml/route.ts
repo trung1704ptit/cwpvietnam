@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
 import { locales } from '@/i18n/config'
+import { localizePath } from '@/i18n/paths'
 
 const getPostsSitemap = unstable_cache(
   async () => {
@@ -39,7 +40,7 @@ const getPostsSitemap = unstable_cache(
       results.docs
         ?.filter((post) => Boolean(post?.slug))
         .forEach((post) => {
-          const loc = `${SITE_URL}/posts/${post?.slug}`
+          const loc = `${SITE_URL}${localizePath(`/posts/${post.slug}`, locale)}`
           if (seen.has(loc)) return
           seen.add(loc)
           sitemap.push({

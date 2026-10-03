@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
 import { locales } from '@/i18n/config'
+import { localizePath } from '@/i18n/paths'
 
 const getPagesSitemap = unstable_cache(
   async () => {
@@ -15,14 +16,12 @@ const getPagesSitemap = unstable_cache(
     const dateFallback = new Date().toISOString()
     const seen = new Set<string>()
     const defaultSitemap = [
-      {
-        loc: `${SITE_URL}/search`,
-        lastmod: dateFallback,
-      },
-      {
-        loc: `${SITE_URL}/posts`,
-        lastmod: dateFallback,
-      },
+      ...locales.flatMap((locale) =>
+        ['/search', '/posts'].map((path) => ({
+          loc: `${SITE_URL}${localizePath(path, locale)}`,
+          lastmod: dateFallback,
+        })),
+      ),
     ]
 
     const sitemap: { loc: string; lastmod: string }[] = []
@@ -52,7 +51,7 @@ const getPagesSitemap = unstable_cache(
       results.docs
         ?.filter((page) => Boolean(page?.slug))
         .forEach((page) => {
-          const loc = page.id === homePageId ? `${SITE_URL}/` : `${SITE_URL}/${page?.slug}`
+          const loc = `${SITE_URL}${localizePath(page.id === homePageId ? '/' : `/${page.slug}`, locale)}`
           if (seen.has(loc)) return
           seen.add(loc)
           sitemap.push({

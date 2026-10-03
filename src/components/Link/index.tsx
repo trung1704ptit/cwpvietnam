@@ -1,7 +1,7 @@
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
 import { getCMSLinkHref } from '@/utilities/getCMSLinkHref'
-import Link from 'next/link'
+import { LocalizedLink as Link } from '@/components/LocalizedLink'
 import React from 'react'
 
 import type { Page, Post } from '@/payload-types'

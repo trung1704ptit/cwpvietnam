@@ -1,5 +1,5 @@
 'use client'
-import Link from 'next/link'
+import { LocalizedLink as Link } from '@/components/LocalizedLink'
 import React, { useSyncExternalStore } from 'react'
 
 import type { Header } from '@/payload-types'

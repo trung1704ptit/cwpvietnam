@@ -10,6 +10,8 @@ import { useRouter } from 'next/navigation'
 
 import './index.scss'
 
+import { localizePath } from '@/i18n/paths'
+import { useLocale } from '@/i18n/useLocale'
 import { getClientSideURL } from '@/utilities/getURL'
 
 const baseClass = 'admin-bar'
@@ -41,6 +43,7 @@ export const AdminBar: React.FC<{
     collectionLabels[segments?.[1] as keyof typeof collectionLabels] ? segments[1] : 'pages'
   ) as keyof typeof collectionLabels
   const router = useRouter()
+  const locale = useLocale()
 
   const onAuthChange = React.useCallback((user: PayloadMeUser) => {
     setShow(Boolean(user?.id))
@@ -72,7 +75,7 @@ export const AdminBar: React.FC<{
           onAuthChange={onAuthChange}
           onPreviewExit={() => {
             fetch('/next/exit-preview').then(() => {
-              router.push('/')
+              router.push(localizePath('/', locale))
               router.refresh()
             })
           }}

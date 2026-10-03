@@ -8,7 +8,7 @@ import React from 'react'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 import { getMessages, type Messages } from '@/i18n/messages'
-import { getLocale } from '@/utilities/getLocale'
+import type { Locale } from '@/i18n/config'
 import { cn } from '@/utilities/ui'
 
 const getInitials = (name?: string | null) => {
@@ -78,9 +78,10 @@ const TeamMemberRow: React.FC<{ member: TeamMember; t: Messages }> = ({ member, 
   )
 }
 
-export const TeamBlock: React.FC<TeamBlockProps & { id?: string }> = async (props) => {
-  const { id, introContent, members: selectedMembers, populateBy } = props
-  const locale = await getLocale()
+export const TeamBlock: React.FC<TeamBlockProps & { id?: string; locale: Locale }> = async (
+  props,
+) => {
+  const { id, introContent, locale, members: selectedMembers, populateBy } = props
   const t = getMessages(locale)
 
   let members: TeamMember[] = []

@@ -21,9 +21,11 @@ import type {
 } from '@/payload-types'
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { LocalizedLink } from '@/components/LocalizedLink'
 import { VideoBlock } from '@/blocks/VideoBlock/Component'
 import { parseTextStyle } from '@/fields/fontStyle/shared'
 import { getTextStateStyle } from '@/fields/textState'
+import { getDocHref } from '@/utilities/getCMSLinkHref'
 import { cn } from '@/utilities/ui'
 
 type NodeTypes =
@@ -37,13 +39,26 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   if (typeof value !== 'object') {
     throw new Error('Expected value to be an object')
   }
-  const slug = value.slug
-  return relationTo === 'posts' ? `/posts/${slug}` : `/${slug}`
+  return getDocHref(relationTo, String(value.slug ?? ''))
 }
 
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
+  link: ({ node, nodesToJSX }) => {
+    const href =
+      node.fields.linkType === 'internal' ? internalDocToHref({ linkNode: node }) : node.fields.url
+
+    return (
+      <LocalizedLink
+        href={href || '#'}
+        rel={node.fields.newTab ? 'noopener noreferrer' : undefined}
+        target={node.fields.newTab ? '_blank' : undefined}
+      >
+        {nodesToJSX({ nodes: node.children })}
+      </LocalizedLink>
+    )
+  },
   text: (args) => {
     const textConverter = defaultConverters.text
     const converted = typeof textConverter === 'function' ? textConverter(args) : textConverter

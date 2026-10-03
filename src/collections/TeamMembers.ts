@@ -3,6 +3,10 @@ import type { Access, CollectionBeforeChangeHook, CollectionConfig } from 'paylo
 import { convertLexicalToPlaintext } from '@payloadcms/richtext-lexical/plaintext'
 
 import { authenticated } from '../access/authenticated'
+import {
+  revalidateAllPagesAfterChange,
+  revalidateAllPagesAfterDelete,
+} from '../hooks/revalidateAllPages'
 
 const authenticatedOrActive: Access = ({ req: { user } }) => {
   if (user) return true
@@ -40,6 +44,8 @@ export const TeamMembers: CollectionConfig = {
   },
   orderable: true,
   hooks: {
+    afterChange: [revalidateAllPagesAfterChange],
+    afterDelete: [revalidateAllPagesAfterDelete],
     beforeChange: [setNameFromFullName],
   },
   fields: [

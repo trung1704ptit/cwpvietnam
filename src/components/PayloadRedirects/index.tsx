@@ -1,24 +1,31 @@
 import type React from 'react'
 import type { Page, Post } from '@/payload-types'
 
+import type { Locale } from '@/i18n/config'
+import { localizePath } from '@/i18n/paths'
 import { getCachedDocument } from '@/utilities/getDocument'
 import { getCachedRedirects } from '@/utilities/getRedirects'
 import { notFound, redirect } from 'next/navigation'
 
 interface Props {
   disableNotFound?: boolean
+  locale: Locale
+  /** Path without the locale prefix, e.g. `/posts/my-post`. */
   url: string
 }
 
 /* This component helps us with SSR based dynamic redirects */
-export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, url }) => {
+export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, locale, url }) => {
   const redirects = await getCachedRedirects()()
+  const localizedUrl = localizePath(url, locale)
 
-  const redirectItem = redirects.find((redirect) => redirect.from === url)
+  const redirectItem = redirects.find(
+    (redirect) => redirect.from === localizedUrl || redirect.from === url,
+  )
 
   if (redirectItem) {
     if (redirectItem.to?.url) {
-      redirect(redirectItem.to.url)
+      redirect(localizePath(redirectItem.to.url, locale))
     }
 
     let redirectUrl: string
@@ -27,7 +34,7 @@ export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, url }
       const collection = redirectItem.to?.reference?.relationTo
       const id = redirectItem.to?.reference?.value
 
-      const document = (await getCachedDocument(collection, id)()) as Page | Post
+      const document = (await getCachedDocument(collection, id, locale)()) as Page | Post
       redirectUrl = `${redirectItem.to?.reference?.relationTo !== 'pages' ? `/${redirectItem.to?.reference?.relationTo}` : ''}/${
         document?.slug
       }`
@@ -39,7 +46,7 @@ export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, url }
       }`
     }
 
-    if (redirectUrl) redirect(redirectUrl)
+    if (redirectUrl) redirect(localizePath(redirectUrl, locale))
   }
 
   if (disableNotFound) return null

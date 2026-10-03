@@ -2,6 +2,8 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import React, { useState, useEffect } from 'react'
+import { localizePath, stripLocale } from '@/i18n/paths'
+import { useLocale } from '@/i18n/useLocale'
 import { useDebounce } from '@/utilities/useDebounce'
 import { usePathname, useRouter } from 'next/navigation'
 
@@ -14,15 +16,16 @@ export const Search: React.FC<{
   const [value, setValue] = useState(initialQuery)
   const router = useRouter()
   const pathname = usePathname()
-  const isSearchPage = live || pathname === '/search'
+  const locale = useLocale()
+  const isSearchPage = live || stripLocale(pathname) === '/search'
   const debouncedValue = useDebounce(value)
 
   useEffect(() => {
     if (!isSearchPage) return
 
     const next = debouncedValue ? `/search?q=${encodeURIComponent(debouncedValue)}` : '/search'
-    router.replace(next)
-  }, [debouncedValue, isSearchPage, router])
+    router.replace(localizePath(next, locale))
+  }, [debouncedValue, isSearchPage, locale, router])
 
   return (
     <div>
@@ -31,7 +34,7 @@ export const Search: React.FC<{
         onSubmit={(e) => {
           e.preventDefault()
           if (!isSearchPage) {
-            router.push(`/search?q=${encodeURIComponent(value)}`)
+            router.push(localizePath(`/search?q=${encodeURIComponent(value)}`, locale))
           }
         }}
       >

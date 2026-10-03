@@ -1,18 +1,17 @@
 import { getCachedGlobal } from '@/utilities/getGlobals'
-import { getLocale } from '@/utilities/getLocale'
-import Link from 'next/link'
 import React, { Suspense } from 'react'
 
 import { CMSLink } from '@/components/Link'
 import { LocaleSwitcher } from '@/components/LocaleSwitcher'
+import { LocalizedLink as Link } from '@/components/LocalizedLink'
 import { Logo } from '@/components/Logo/Logo'
+import type { Locale } from '@/i18n/config'
 import { getMessages } from '@/i18n/messages'
 import { normalizeHexColor } from '@/utilities/themeColor'
 
 const DEFAULT_FOOTER_BACKGROUND = '#ffefec'
 
-export async function Footer() {
-  const locale = await getLocale()
+export async function Footer({ locale }: { locale: Locale }) {
   const [footerData, settings] = await Promise.all([
     getCachedGlobal('footer', 1, locale)(),
     getCachedGlobal('settings', 0)(),

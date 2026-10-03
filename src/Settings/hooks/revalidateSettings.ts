@@ -1,14 +1,15 @@
 import type { GlobalAfterChangeHook } from 'payload'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { expireAllPages, expireTag } from '@/utilities/pageCache'
 
 export const revalidateSettings: GlobalAfterChangeHook = ({ doc, req: { payload, context } }) => {
   if (!context.disableRevalidate) {
     payload.logger.info(`Revalidating settings`)
 
-    revalidateTag('global_settings', 'max')
-    revalidateTag('pages-sitemap', 'max')
-    revalidatePath('/')
+    // Theme, fonts and the home page selection affect every page.
+    expireTag('global_settings')
+    expireTag('pages-sitemap')
+    expireAllPages()
   }
 
   return doc

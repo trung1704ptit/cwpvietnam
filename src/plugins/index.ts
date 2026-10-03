@@ -5,12 +5,18 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { Plugin } from 'payload'
+import {
+  revalidateAllPagesAfterChange,
+  revalidateAllPagesAfterDelete,
+} from '@/hooks/revalidateAllPages'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
 
+import { defaultLocale, isLocale } from '@/i18n/config'
+import { localizePath } from '@/i18n/paths'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
@@ -18,10 +24,12 @@ const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Cancer wellness program` : 'Cancer wellness program'
 }
 
-const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
+const generateURL: GenerateURL<Post | Page> = ({ collectionConfig, doc, locale }) => {
   const url = getServerSideURL()
+  const pathLocale = isLocale(locale) ? locale : defaultLocale
+  const prefix = collectionConfig?.slug === 'posts' ? '/posts' : ''
 
-  return doc?.slug ? `${url}/${doc.slug}` : url
+  return `${url}${localizePath(doc?.slug ? `${prefix}/${doc.slug}` : '/', pathLocale)}`
 }
 
 export const plugins: Plugin[] = [
@@ -60,6 +68,10 @@ export const plugins: Plugin[] = [
       payment: false,
     },
     formOverrides: {
+      hooks: {
+        afterChange: [revalidateAllPagesAfterChange],
+        afterDelete: [revalidateAllPagesAfterDelete],
+      },
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
           if ('name' in field && field.name === 'confirmationMessage') {
