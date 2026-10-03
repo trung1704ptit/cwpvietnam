@@ -53,7 +53,7 @@ export const Search: React.FC<{
           className={
             isSearchPage
               ? 'sr-only'
-              : 'inline-flex h-9 shrink-0 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground'
+              : 'inline-flex h-9 shrink-0 items-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground'
           }
           type="submit"
         >

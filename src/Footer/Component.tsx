@@ -31,9 +31,7 @@ export async function Footer({ locale }: { locale: Locale }) {
               <span className="text-lg font-semibold tracking-tight text-primary">{siteTitle}</span>
             </Link>
             {footerData?.description && (
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                {footerData.description}
-              </p>
+              <p className="text-sm leading-relaxed">{footerData.description}</p>
             )}
           </div>
 
@@ -41,7 +39,7 @@ export async function Footer({ locale }: { locale: Locale }) {
             <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">
               {t.contactInformation}
             </h2>
-            <ul className="space-y-2 text-sm leading-relaxed text-muted-foreground">
+            <ul className="space-y-2 text-sm leading-relaxed">
               {contact?.address && <li className="whitespace-pre-line">{contact.address}</li>}
               {contact?.phone && (
                 <li>
@@ -73,7 +71,7 @@ export async function Footer({ locale }: { locale: Locale }) {
             <nav className="flex flex-col gap-2">
               {navItems.map(({ link }, i) => (
                 <CMSLink
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="text-sm hover:text-primary transition-colors"
                   key={i}
                   {...link}
                 />
@@ -88,7 +86,7 @@ export async function Footer({ locale }: { locale: Locale }) {
             <nav className="flex flex-col gap-2">
               {socialLinks.map(({ link }, i) => (
                 <CMSLink
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="text-sm hover:text-primary transition-colors"
                   key={i}
                   {...link}
                 />
@@ -98,7 +96,7 @@ export async function Footer({ locale }: { locale: Locale }) {
         </div>
 
         <div className="mt-10 flex flex-col gap-4 border-t border-black/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs">
             © {new Date().getFullYear()} {siteTitle}
           </p>
           <Suspense>

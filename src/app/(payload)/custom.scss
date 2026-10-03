@@ -1,0 +1,194 @@
+// Brand colors; keep in sync with the site's default primary color in Settings.
+:root {
+  --cwp-primary: #dd3e60;
+  --cwp-primary-hover: #c42f50;
+  --cwp-primary-soft: rgba(221, 62, 96, 0.12);
+  --cwp-blue: #1f6fb5;
+}
+
+// Pill-shaped buttons across the admin
+.btn,
+.btn--withPopup .popup-button {
+  border-radius: 999px;
+}
+
+// Split buttons (e.g. "Publish ▾"): rules here are unlayered, so they also override Payload's
+// squared inner corners and must restore them.
+html:not([dir='RTL']) .btn--withPopup {
+  .btn {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .popup-button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+html[dir='RTL'] .btn--withPopup {
+  .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .popup-button {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+// Admin graphics
+.cwp-admin-logo {
+  display: flex;
+  justify-content: center;
+}
+
+.cwp-admin-logo__img {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+}
+
+.cwp-admin-logo__img--dark,
+html[data-theme='dark'] .cwp-admin-logo__img--light {
+  display: none;
+}
+
+html[data-theme='dark'] .cwp-admin-logo__img--dark {
+  display: block;
+}
+
+.cwp-admin-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+// Login, create-first-user, forgot/reset password and logout screens
+.template-minimal {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(221, 62, 96, 0.18), transparent 42%),
+    radial-gradient(circle at 88% 82%, rgba(31, 111, 181, 0.14), transparent 45%),
+    linear-gradient(160deg, #fff7f5 0%, #ffefec 100%);
+
+  html[data-theme='dark'] & {
+    background:
+      radial-gradient(circle at 12% 18%, rgba(221, 62, 96, 0.22), transparent 42%),
+      radial-gradient(circle at 88% 82%, rgba(31, 111, 181, 0.18), transparent 45%),
+      var(--theme-bg-color);
+  }
+
+  // Faint flower watermark in the corner
+  &::before {
+    content: '';
+    position: absolute;
+    right: -120px;
+    bottom: -120px;
+    width: 420px;
+    height: 420px;
+    background: url('/logo-icon.png') center / contain no-repeat;
+    opacity: 0.08;
+    transform: rotate(-18deg);
+    pointer-events: none;
+  }
+
+  &__wrap {
+    position: relative;
+    padding: 44px 40px 36px;
+    border: 1px solid rgba(221, 62, 96, 0.12);
+    border-top: 4px solid var(--cwp-primary);
+    border-radius: 20px;
+    background: var(--theme-elevation-0);
+    box-shadow:
+      0 24px 60px -24px rgba(221, 62, 96, 0.35),
+      0 8px 24px -12px rgba(15, 23, 42, 0.12);
+
+    html[data-theme='dark'] & {
+      border-color: var(--theme-elevation-100);
+      border-top-color: var(--cwp-primary);
+      background: var(--theme-elevation-50);
+      box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.6);
+    }
+
+    @media (max-width: 600px) {
+      padding: 32px 22px 26px;
+      border-radius: 16px;
+    }
+  }
+
+  &--width-normal &__wrap {
+    max-width: 440px;
+  }
+
+  .login__brand {
+    margin-bottom: 24px;
+  }
+
+  // Inputs
+  input:focus,
+  input:focus-within {
+    border-color: var(--cwp-primary) !important;
+    box-shadow: 0 0 0 3px var(--cwp-primary-soft) !important;
+  }
+
+  .field-label {
+    font-weight: 600;
+  }
+
+  // Links (e.g. "Forgot password?")
+  a:not(.btn) {
+    color: var(--cwp-primary);
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--cwp-primary-hover);
+      text-decoration: underline;
+    }
+  }
+
+  // Primary button
+  .btn--style-primary {
+    --bg-color: var(--cwp-primary);
+    --hover-bg: var(--cwp-primary-hover);
+    --color: #fff;
+    --hover-color: #fff;
+    width: 100%;
+    font-weight: 600;
+    box-shadow: 0 10px 24px -12px rgba(221, 62, 96, 0.7);
+    transition:
+      background-color 0.15s ease,
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px -12px rgba(221, 62, 96, 0.75);
+    }
+  }
+}
+
+.cwp-login-intro {
+  margin-bottom: 28px;
+  text-align: center;
+
+  &__title {
+    margin: 0 0 6px;
+    color: var(--theme-elevation-1000);
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  &__subtitle {
+    margin: 0;
+    color: var(--theme-elevation-500);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+}
