@@ -14,6 +14,10 @@ import {
   revalidateAllPagesAfterChange,
   revalidateAllPagesAfterDelete,
 } from '../hooks/revalidateAllPages'
+import {
+  revalidatePostsListAfterChange,
+  revalidatePostsListAfterDelete,
+} from '../hooks/revalidatePostsList'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,8 +26,8 @@ export const Media: CollectionConfig = {
   slug: 'media',
   folders: true,
   hooks: {
-    afterChange: [revalidateAllPagesAfterChange],
-    afterDelete: [revalidateAllPagesAfterDelete],
+    afterChange: [revalidatePostsListAfterChange, revalidateAllPagesAfterChange],
+    afterDelete: [revalidatePostsListAfterDelete, revalidateAllPagesAfterDelete],
   },
   access: {
     create: authenticated,

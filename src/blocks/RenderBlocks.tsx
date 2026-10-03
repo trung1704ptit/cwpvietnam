@@ -12,6 +12,7 @@ import { FeatureBlock } from '@/blocks/FeatureBlock/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { HomePartnersBlock } from '@/blocks/HomePartners/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { PostsListBlock } from '@/blocks/PostsList/Component'
 import { PublicationsBlock } from '@/blocks/Publications/Component'
 import { TeamBlock } from '@/blocks/Team/Component'
 
@@ -25,6 +26,7 @@ const blockComponents = {
   formBlock: FormBlock,
   homePartners: HomePartnersBlock,
   mediaBlock: MediaBlock,
+  postsList: PostsListBlock,
   publications: PublicationsBlock,
   team: TeamBlock,
 }

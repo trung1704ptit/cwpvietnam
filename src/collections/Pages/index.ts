@@ -11,6 +11,7 @@ import { FeatureBlock } from '../../blocks/FeatureBlock/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { HomePartners } from '../../blocks/HomePartners/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { PostsList } from '../../blocks/PostsList/config'
 import { Publications } from '../../blocks/Publications/config'
 import { Team } from '../../blocks/Team/config'
 import { hero } from '@/heros/config'
@@ -93,6 +94,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 FeatureBlock,
                 Contact,
                 Publications,
+                PostsList,
               ],
               required: true,
               admin: {

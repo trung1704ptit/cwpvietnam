@@ -19,6 +19,7 @@ import * as migration_20261003_030436_contact_block from './20261003_030436_cont
 import * as migration_20261003_035202_carousel_mobile_height from './20261003_035202_carousel_mobile_height';
 import * as migration_20261003_063300_copy_missing_locales from './20261003_063300_copy_missing_locales';
 import * as migration_20261003_065819_publications_block from './20261003_065819_publications_block';
+import * as migration_20261003_081029_posts_list_block from './20261003_081029_posts_list_block';
 
 export const migrations = [
   {
@@ -124,6 +125,11 @@ export const migrations = [
   {
     up: migration_20261003_065819_publications_block.up,
     down: migration_20261003_065819_publications_block.down,
-    name: '20261003_065819_publications_block'
+    name: '20261003_065819_publications_block',
+  },
+  {
+    up: migration_20261003_081029_posts_list_block.up,
+    down: migration_20261003_081029_posts_list_block.down,
+    name: '20261003_081029_posts_list_block'
   },
 ];

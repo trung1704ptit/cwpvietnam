@@ -7,6 +7,10 @@ import {
   revalidateAllPagesAfterChange,
   revalidateAllPagesAfterDelete,
 } from '@/hooks/revalidateAllPages'
+import {
+  revalidatePostsListAfterChange,
+  revalidatePostsListAfterDelete,
+} from '@/hooks/revalidatePostsList'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
@@ -20,8 +24,8 @@ export const Categories: CollectionConfig = {
     useAsTitle: 'title',
   },
   hooks: {
-    afterChange: [revalidateAllPagesAfterChange],
-    afterDelete: [revalidateAllPagesAfterDelete],
+    afterChange: [revalidatePostsListAfterChange, revalidateAllPagesAfterChange],
+    afterDelete: [revalidatePostsListAfterDelete, revalidateAllPagesAfterDelete],
   },
   fields: [
     {

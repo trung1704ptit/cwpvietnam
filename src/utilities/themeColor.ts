@@ -1,5 +1,6 @@
 export const DEFAULT_PRIMARY_COLOR = '#dd3e60'
 export const DEFAULT_PRIMARY_FOREGROUND = '#ffffff'
+export const DEFAULT_FOOTER_BACKGROUND = '#ffefec'
 
 const HEX_COLOR = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
 

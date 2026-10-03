@@ -141,7 +141,7 @@ export const FeatureBlock: React.FC<FeatureBlockProps> = ({
                     )}
                     {item.enableLink && item.link && (
                       <div className="mt-auto pt-6">
-                        <CMSLink size="lg" {...item.link} />
+                        <CMSLink size="default" {...item.link} />
                       </div>
                     )}
                   </article>
@@ -153,7 +153,7 @@ export const FeatureBlock: React.FC<FeatureBlockProps> = ({
 
         {showLink && link && (
           <div className="mt-12 flex justify-center">
-            <CMSLink size="xl" {...link} />
+            <CMSLink size="default" {...link} />
           </div>
         )}
       </div>

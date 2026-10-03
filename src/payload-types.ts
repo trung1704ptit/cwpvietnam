@@ -219,6 +219,7 @@ export interface Page {
     | FeatureBlock
     | ContactBlock
     | PublicationsBlock
+    | PostsListBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1239,6 +1240,24 @@ export interface PublicationsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostsListBlock".
+ */
+export interface PostsListBlock {
+  /**
+   * Posts per row on large screens.
+   */
+  columns: '1' | '2' | '3';
+  /**
+   * Posts shown first; "Load more" adds this many again.
+   */
+  postsPerPage: number;
+  showAuthor?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'postsList';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1559,6 +1578,7 @@ export interface PagesSelect<T extends boolean = true> {
         featureBlock?: T | FeatureBlockSelect<T>;
         contactBlock?: T | ContactBlockSelect<T>;
         publications?: T | PublicationsBlockSelect<T>;
+        postsList?: T | PostsListBlockSelect<T>;
       };
   meta?:
     | T
@@ -1851,6 +1871,17 @@ export interface PublicationsBlockSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostsListBlock_select".
+ */
+export interface PostsListBlockSelect<T extends boolean = true> {
+  columns?: T;
+  postsPerPage?: T;
+  showAuthor?: T;
   id?: T;
   blockName?: T;
 }

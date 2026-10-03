@@ -7,9 +7,6 @@ import { LocalizedLink as Link } from '@/components/LocalizedLink'
 import { Logo } from '@/components/Logo/Logo'
 import type { Locale } from '@/i18n/config'
 import { getMessages } from '@/i18n/messages'
-import { normalizeHexColor } from '@/utilities/themeColor'
-
-const DEFAULT_FOOTER_BACKGROUND = '#ffefec'
 
 export async function Footer({ locale }: { locale: Locale }) {
   const [footerData, settings] = await Promise.all([
@@ -19,20 +16,13 @@ export async function Footer({ locale }: { locale: Locale }) {
 
   const t = getMessages(locale)
   const siteTitle = settings?.siteTitle?.trim() || 'Cancer Wellness Program'
-  const footerBackground = normalizeHexColor(
-    settings?.footerBackgroundColor,
-    DEFAULT_FOOTER_BACKGROUND,
-  )
 
   const navItems = footerData?.navItems || []
   const socialLinks = footerData?.socialLinks || []
   const contact = footerData?.contact
 
   return (
-    <footer
-      className="mt-auto border-t border-black/5 text-foreground"
-      style={{ backgroundColor: footerBackground }}
-    >
+    <footer className="mt-auto border-t border-black/5 bg-(--footer-background) text-foreground">
       <div className="container py-12 md:py-14">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))] lg:gap-8">
           <div className="max-w-md space-y-4">

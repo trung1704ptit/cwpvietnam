@@ -18,6 +18,7 @@ import { getServerSideURL } from '@/utilities/getURL'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import type { Locale } from '@/i18n/config'
 import {
+  DEFAULT_FOOTER_BACKGROUND,
   DEFAULT_PRIMARY_COLOR,
   DEFAULT_PRIMARY_FOREGROUND,
   getContrastingForeground,
@@ -38,6 +39,10 @@ async function getSiteTheme() {
     return {
       baseFontSize: normalizeBaseFontSize(settings?.baseFontSize),
       fontFamily: normalizeSiteFont(settings?.fontFamily),
+      footerBackground: normalizeHexColor(
+        settings?.footerBackgroundColor,
+        DEFAULT_FOOTER_BACKGROUND,
+      ),
       primaryColor,
       primaryForeground: getContrastingForeground(primaryColor),
     }
@@ -45,6 +50,7 @@ async function getSiteTheme() {
     return {
       baseFontSize: DEFAULT_BASE_FONT_SIZE,
       fontFamily: DEFAULT_SITE_FONT,
+      footerBackground: DEFAULT_FOOTER_BACKGROUND,
       primaryColor: DEFAULT_PRIMARY_COLOR,
       primaryForeground: DEFAULT_PRIMARY_FOREGROUND,
     }
@@ -59,7 +65,8 @@ export async function SiteLayout({
   locale: Locale
 }) {
   const { isEnabled } = await draftMode()
-  const { baseFontSize, fontFamily, primaryColor, primaryForeground } = await getSiteTheme()
+  const { baseFontSize, fontFamily, footerBackground, primaryColor, primaryForeground } =
+    await getSiteTheme()
 
   return (
     <html className={cn(fontVariableClassNames)} lang={locale} suppressHydrationWarning>
@@ -67,7 +74,7 @@ export async function SiteLayout({
         <InitTheme />
         <style
           dangerouslySetInnerHTML={{
-            __html: `:root,[data-theme='light'],[data-theme='dark']{--primary:${primaryColor};--primary-foreground:${primaryForeground};--sidebar-primary:${primaryColor};--sidebar-primary-foreground:${primaryForeground};}html{--font-site:var(${siteFonts[fontFamily].cssVariable});font-size:${baseFontSize}px;}`,
+            __html: `:root,[data-theme='light'],[data-theme='dark']{--primary:${primaryColor};--primary-foreground:${primaryForeground};--sidebar-primary:${primaryColor};--sidebar-primary-foreground:${primaryForeground};--footer-background:${footerBackground};}html{--font-site:var(${siteFonts[fontFamily].cssVariable});font-size:${baseFontSize}px;}`,
           }}
         />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />

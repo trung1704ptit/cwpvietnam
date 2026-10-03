@@ -12,8 +12,16 @@ const config = {
               '--tw-prose-invert-links': 'var(--primary)',
               '--tw-prose-bullets': 'var(--primary)',
               '--tw-prose-invert-bullets': 'var(--primary)',
+              '--tw-prose-quotes': 'var(--text)',
+              '--tw-prose-quote-borders': 'var(--primary)',
+              '--tw-prose-invert-quote-borders': 'var(--primary)',
               a: {
                 textDecoration: 'none',
+              },
+              blockquote: {
+                backgroundColor: 'var(--footer-background)',
+                borderRadius: '0.5rem',
+                padding: '1rem 1.25rem',
               },
               h1: {
                 fontWeight: 'normal',
@@ -21,6 +29,13 @@ const config = {
               },
             },
           ],
+        },
+        invert: {
+          css: {
+            blockquote: {
+              backgroundColor: 'var(--card)',
+            },
+          },
         },
         base: {
           css: [
