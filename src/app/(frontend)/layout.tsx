@@ -1,16 +1,9 @@
 import type { Metadata } from 'next'
 
 import { cn } from '@/utilities/ui'
-import { Lato } from 'next/font/google'
 import React from 'react'
 
-const lato = Lato({
-  subsets: ['latin', 'latin-ext'],
-  weight: ['300', '400', '700'],
-  variable: '--font-lato',
-  display: 'swap',
-})
-
+import { fontVariableClassNames, siteFonts } from './fonts'
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
@@ -29,18 +22,28 @@ import {
   getContrastingForeground,
   normalizeHexColor,
 } from '@/utilities/themeColor'
+import {
+  DEFAULT_BASE_FONT_SIZE,
+  DEFAULT_SITE_FONT,
+  normalizeBaseFontSize,
+  normalizeSiteFont,
+} from '@/utilities/siteFonts'
 
-async function getThemeColors() {
+async function getSiteTheme() {
   try {
     const settings = await getCachedGlobal('settings', 0)()
     const primaryColor = normalizeHexColor(settings?.primaryColor)
 
     return {
+      baseFontSize: normalizeBaseFontSize(settings?.baseFontSize),
+      fontFamily: normalizeSiteFont(settings?.fontFamily),
       primaryColor,
       primaryForeground: getContrastingForeground(primaryColor),
     }
   } catch {
     return {
+      baseFontSize: DEFAULT_BASE_FONT_SIZE,
+      fontFamily: DEFAULT_SITE_FONT,
       primaryColor: DEFAULT_PRIMARY_COLOR,
       primaryForeground: DEFAULT_PRIMARY_FOREGROUND,
     }
@@ -49,22 +52,22 @@ async function getThemeColors() {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
-  const { primaryColor, primaryForeground } = await getThemeColors()
+  const { baseFontSize, fontFamily, primaryColor, primaryForeground } = await getSiteTheme()
   const locale = await getLocale()
 
   return (
-    <html className={cn(lato.variable)} lang={locale} suppressHydrationWarning>
+    <html className={cn(fontVariableClassNames)} lang={locale} suppressHydrationWarning>
       <head>
         <InitTheme />
         <style
           dangerouslySetInnerHTML={{
-            __html: `:root,[data-theme='light'],[data-theme='dark']{--primary:${primaryColor};--primary-foreground:${primaryForeground};--sidebar-primary:${primaryColor};--sidebar-primary-foreground:${primaryForeground};}`,
+            __html: `:root,[data-theme='light'],[data-theme='dark']{--primary:${primaryColor};--primary-foreground:${primaryForeground};--sidebar-primary:${primaryColor};--sidebar-primary-foreground:${primaryForeground};}html{--font-site:var(${siteFonts[fontFamily].cssVariable});font-size:${baseFontSize}px;}`,
           }}
         />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
-      <body className={cn('font-sans antialiased', lato.className)}>
+      <body className="font-sans antialiased">
         <Providers>
           <AdminBar
             adminBarProps={{

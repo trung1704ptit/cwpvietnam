@@ -44,7 +44,7 @@
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --font-sans: var(--font-lato), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-site, var(--font-lato)), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer utilities {
@@ -211,6 +211,9 @@
   }
   body {
     @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+  }
+  ul > li::marker {
+    color: var(--primary);
   }
 }
 

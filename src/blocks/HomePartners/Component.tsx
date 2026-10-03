@@ -97,7 +97,7 @@ export const HomePartnersBlock: React.FC<HomePartnersBlockProps> = ({
           )}
           {description && (
             <RichText
-              className="mt-5 text-base leading-relaxed text-muted-foreground md:text-lg [&_a]:text-primary [&_a]:underline [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-4 [&_ul]:list-inside [&_ul]:list-disc"
+              className="mt-5 text-base leading-relaxed text-muted-foreground md:text-lg [&_a]:text-primary [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-4 [&_ul]:list-inside [&_ul]:list-disc"
               data={description}
               enableGutter={false}
               enableProse={false}

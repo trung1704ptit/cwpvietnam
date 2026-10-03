@@ -132,7 +132,7 @@ export const FeatureBlock: React.FC<FeatureBlockProps> = ({
                     )}
                     {item.description && (
                       <RichText
-                        className="mt-3 w-full text-base leading-relaxed text-muted-foreground [&_a]:text-primary [&_a]:underline [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-3 [&_ul]:list-inside [&_ul]:list-disc"
+                        className="mt-3 w-full text-base leading-relaxed text-muted-foreground [&_a]:text-primary [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-3 [&_ul]:list-inside [&_ul]:list-disc"
                         data={item.description}
                         enableGutter={false}
                         enableProse={false}

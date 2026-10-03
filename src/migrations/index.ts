@@ -13,6 +13,9 @@ import * as migration_20261001_141714_home_partners_image_aspect_options from '.
 import * as migration_20261001_151320_feature_block_icon from './20261001_151320_feature_block_icon';
 import * as migration_20261003_022650_feature_block_max_width from './20261003_022650_feature_block_max_width';
 import * as migration_20261003_023017_feature_block_media_size_default from './20261003_023017_feature_block_media_size_default';
+import * as migration_20261003_024024_settings_typography from './20261003_024024_settings_typography';
+import * as migration_20261003_024100_hero_type_default_high_impact from './20261003_024100_hero_type_default_high_impact';
+import * as migration_20261003_030436_contact_block from './20261003_030436_contact_block';
 
 export const migrations = [
   {
@@ -88,6 +91,21 @@ export const migrations = [
   {
     up: migration_20261003_023017_feature_block_media_size_default.up,
     down: migration_20261003_023017_feature_block_media_size_default.down,
-    name: '20261003_023017_feature_block_media_size_default'
+    name: '20261003_023017_feature_block_media_size_default',
+  },
+  {
+    up: migration_20261003_024024_settings_typography.up,
+    down: migration_20261003_024024_settings_typography.down,
+    name: '20261003_024024_settings_typography',
+  },
+  {
+    up: migration_20261003_024100_hero_type_default_high_impact.up,
+    down: migration_20261003_024100_hero_type_default_high_impact.down,
+    name: '20261003_024100_hero_type_default_high_impact',
+  },
+  {
+    up: migration_20261003_030436_contact_block.up,
+    down: migration_20261003_030436_contact_block.down,
+    name: '20261003_030436_contact_block'
   },
 ];

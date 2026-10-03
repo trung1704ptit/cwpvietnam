@@ -1,5 +1,25 @@
 import type { CSSProperties } from 'react'
 
+import { DEFAULT_PRIMARY_COLOR } from '@/utilities/themeColor'
+
+const PRIMARY = `var(--primary, ${DEFAULT_PRIMARY_COLOR})`
+
+/** Theme-aware presets: they follow the Primary Color set in Settings. */
+export const COLOR_PRESETS = {
+  'background-color': [
+    { label: 'Primary', value: PRIMARY },
+    { label: 'Primary (light)', value: `color-mix(in srgb, ${PRIMARY} 15%, transparent)` },
+  ],
+  color: [{ label: 'Primary', value: PRIMARY }],
+} as const satisfies Record<
+  'background-color' | 'color',
+  readonly { label: string; value: string }[]
+>
+
+const presetValues = new Set<string>(
+  Object.values(COLOR_PRESETS).flatMap((presets) => presets.map((preset) => preset.value)),
+)
+
 export const FONT_SIZES = [
   8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28, 30, 32, 36, 40, 44, 48, 54, 60, 66,
   72, 80, 88, 96, 108, 120,
@@ -22,8 +42,11 @@ const colorPattern = /^(#[0-9a-f]{3,8}|rgba?\([\d\s.,%]+\)|[a-z]+)$/i
 // Only these declarations from a text node's inline style reach the frontend.
 const allowedStyles: Record<string, { key: keyof CSSProperties; isValid: (v: string) => boolean }> =
   {
-    'background-color': { key: 'backgroundColor', isValid: (v) => colorPattern.test(v) },
-    color: { key: 'color', isValid: (v) => colorPattern.test(v) },
+    'background-color': {
+      key: 'backgroundColor',
+      isValid: (v) => colorPattern.test(v) || presetValues.has(v),
+    },
+    color: { key: 'color', isValid: (v) => colorPattern.test(v) || presetValues.has(v) },
     'font-family': {
       key: 'fontFamily',
       isValid: (v) => FONT_FAMILIES.some((family) => family.value === v),

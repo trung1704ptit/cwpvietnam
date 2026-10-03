@@ -66,7 +66,7 @@ const TeamMemberRow: React.FC<{ member: TeamMember; t: Messages }> = ({ member, 
               />
             </summary>
             <RichText
-              className="mt-3 border-t border-border pt-3 text-base leading-relaxed text-muted-foreground [&_a]:text-primary [&_a]:underline [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-3 [&_ul]:list-inside [&_ul]:list-disc"
+              className="mt-3 border-t border-border pt-3 text-base leading-relaxed text-muted-foreground [&_a]:text-primary [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-3 [&_ul]:list-inside [&_ul]:list-disc"
               data={description}
               enableGutter={false}
               enableProse={false}

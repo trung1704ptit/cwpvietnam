@@ -248,8 +248,8 @@ const HeaderNavInner: React.FC<{ data: HeaderType; locale: Locale }> = ({ data, 
   }, [menuOpen])
 
   return (
-    <div className="flex items-center gap-3">
-      <nav className="hidden items-center gap-3 lg:flex">
+    <div className="flex items-center gap-3 lg:gap-6">
+      <nav className="hidden items-center gap-6 lg:flex xl:gap-8">
         {navItems.map((item, i) => (
           <DesktopNavItem item={item} key={item.id || i} />
         ))}

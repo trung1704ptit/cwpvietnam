@@ -5,6 +5,7 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { Carousel } from '../../blocks/Carousel/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
+import { Contact } from '../../blocks/Contact/config'
 import { Content } from '../../blocks/Content/config'
 import { FeatureBlock } from '../../blocks/FeatureBlock/config'
 import { FormBlock } from '../../blocks/Form/config'
@@ -89,6 +90,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Team,
                 HomePartners,
                 FeatureBlock,
+                Contact,
               ],
               required: true,
               admin: {

@@ -157,7 +157,7 @@ export const CarouselBlock: React.FC<CarouselBlockProps> = ({
           </h2>
           {activeSlide.text && (
             <RichText
-              className="mx-auto mt-2 line-clamp-2 max-w-5xl text-sm leading-relaxed sm:mt-5 sm:line-clamp-none sm:text-base md:text-lg [&_a]:underline [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-2 [&_ul]:list-inside [&_ul]:list-disc"
+              className="mx-auto mt-2 line-clamp-2 max-w-5xl text-sm leading-relaxed sm:mt-5 sm:line-clamp-none sm:text-base md:text-lg [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-2 [&_ul]:list-inside [&_ul]:list-disc"
               data={activeSlide.text}
               enableGutter={false}
               enableProse={false}

@@ -1,6 +1,13 @@
 import type { GlobalConfig } from 'payload'
 
 import { authenticated } from '@/access/authenticated'
+import {
+  DEFAULT_BASE_FONT_SIZE,
+  DEFAULT_SITE_FONT,
+  MAX_BASE_FONT_SIZE,
+  MIN_BASE_FONT_SIZE,
+  SITE_FONT_OPTIONS,
+} from '@/utilities/siteFonts'
 import { revalidateSettings } from './hooks/revalidateSettings'
 
 const HEX_COLOR = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
@@ -58,6 +65,38 @@ export const Settings: GlobalConfig = {
 
         return true
       },
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'fontFamily',
+          type: 'select',
+          label: 'Font Family',
+          defaultValue: DEFAULT_SITE_FONT,
+          options: SITE_FONT_OPTIONS,
+          required: true,
+          admin: {
+            description: 'Default font for the whole site.',
+            width: '50%',
+          },
+        },
+        {
+          name: 'baseFontSize',
+          type: 'number',
+          label: 'Base Font Size (px)',
+          defaultValue: DEFAULT_BASE_FONT_SIZE,
+          max: MAX_BASE_FONT_SIZE,
+          min: MIN_BASE_FONT_SIZE,
+          required: true,
+          admin: {
+            description:
+              'Default text size for the whole site. Headings and spacing scale with it.',
+            step: 1,
+            width: '50%',
+          },
+        },
+      ],
     },
     {
       name: 'siteTitle',

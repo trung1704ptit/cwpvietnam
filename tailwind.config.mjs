@@ -8,6 +8,13 @@ const config = {
             {
               '--tw-prose-body': 'var(--text)',
               '--tw-prose-headings': 'var(--text)',
+              '--tw-prose-links': 'var(--primary)',
+              '--tw-prose-invert-links': 'var(--primary)',
+              '--tw-prose-bullets': 'var(--primary)',
+              '--tw-prose-invert-bullets': 'var(--primary)',
+              a: {
+                textDecoration: 'none',
+              },
               h1: {
                 fontWeight: 'normal',
                 marginBottom: '0.25em',

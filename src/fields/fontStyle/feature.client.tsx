@@ -15,7 +15,7 @@ import {
 } from '@payloadcms/richtext-lexical/lexical/selection'
 import React, { useEffect, useState } from 'react'
 
-import { FONT_FAMILIES, FONT_SIZES } from './shared'
+import { COLOR_PRESETS, FONT_FAMILIES, FONT_SIZES } from './shared'
 
 type StyleProperty = 'background-color' | 'color' | 'font-family' | 'font-size'
 
@@ -96,7 +96,7 @@ const ColorPicker: React.FC<{
     <span style={{ alignItems: 'center', display: 'inline-flex' }}>
       <label
         className="toolbar-popup__button"
-        style={{ cursor: 'pointer', position: 'relative' }}
+        style={{ cursor: 'pointer', overflow: 'hidden', position: 'relative' }}
         title={title}
       >
         <span
@@ -113,11 +113,50 @@ const ColorPicker: React.FC<{
         <input
           aria-label={title}
           onChange={(event) => applyStyle(editor, { [property]: event.target.value }, true)}
-          style={{ cursor: 'pointer', inset: 0, opacity: 0, position: 'absolute' }}
+          style={{
+            border: 0,
+            cursor: 'pointer',
+            height: '100%',
+            inset: 0,
+            margin: 0,
+            opacity: 0,
+            padding: 0,
+            position: 'absolute',
+            width: '100%',
+          }}
           type="color"
           value={toHex(value, isBackground ? '#ffff00' : '#000000')}
         />
       </label>
+      {COLOR_PRESETS[property].map((preset) => {
+        const isActive = value === preset.value
+
+        return (
+          <button
+            aria-label={`${title}: ${preset.label}`}
+            aria-pressed={isActive}
+            className="toolbar-popup__button"
+            key={preset.value}
+            onClick={() => applyStyle(editor, { [property]: isActive ? null : preset.value })}
+            style={{ minWidth: '20px', padding: '0 3px', position: 'relative', zIndex: 1 }}
+            title={`${title}: ${preset.label}`}
+            type="button"
+          >
+            <span
+              style={{
+                background: preset.value,
+                borderRadius: '50%',
+                boxShadow: isActive
+                  ? '0 0 0 2px var(--theme-elevation-0), 0 0 0 3px var(--theme-text)'
+                  : 'inset 0 0 0 1px var(--theme-elevation-250)',
+                display: 'block',
+                height: '14px',
+                width: '14px',
+              }}
+            />
+          </button>
+        )
+      })}
       {value ? (
         <button
           aria-label={`Remove ${title.toLowerCase()}`}

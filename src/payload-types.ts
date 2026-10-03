@@ -217,6 +217,7 @@ export interface Page {
     | TeamBlock
     | HomePartnersBlock
     | FeatureBlock
+    | ContactBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1099,6 +1100,73 @@ export interface FeatureBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactBlock".
+ */
+export interface ContactBlock {
+  /**
+   * Limits the width of all content and keeps it centered. Leave empty for full container width.
+   */
+  maxWidth?: number | null;
+  address?: {
+    icon?: string | null;
+    title?: string | null;
+    content?: string | null;
+  };
+  phone?: {
+    icon?: string | null;
+    title?: string | null;
+    /**
+     * One phone number per line. Each becomes a tap-to-call link.
+     */
+    content?: string | null;
+  };
+  email?: {
+    icon?: string | null;
+    title?: string | null;
+    email?: string | null;
+  };
+  social?: {
+    icon?: string | null;
+    title?: string | null;
+    content?: string | null;
+    /**
+     * Search the icon picker for e.g. "facebook", "x twitter", "youtube".
+     */
+    links?:
+      | {
+          label: string;
+          url: string;
+          icon: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Company address (e.g. "VinUniversity, Gia Lâm, Hà Nội") or the iframe code from Google Maps → Share → Embed a map.
+   */
+  map?: string | null;
+  mapHeight?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contactBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1417,6 +1485,7 @@ export interface PagesSelect<T extends boolean = true> {
         team?: T | TeamBlockSelect<T>;
         homePartners?: T | HomePartnersBlockSelect<T>;
         featureBlock?: T | FeatureBlockSelect<T>;
+        contactBlock?: T | ContactBlockSelect<T>;
       };
   meta?:
     | T
@@ -1642,6 +1711,54 @@ export interface FeatureBlockSelect<T extends boolean = true> {
         label?: T;
         appearance?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactBlock_select".
+ */
+export interface ContactBlockSelect<T extends boolean = true> {
+  maxWidth?: T;
+  address?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        content?: T;
+      };
+  phone?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        content?: T;
+      };
+  email?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        email?: T;
+      };
+  social?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        content?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              url?: T;
+              icon?: T;
+              id?: T;
+            };
+      };
+  content?: T;
+  map?: T;
+  mapHeight?: T;
   id?: T;
   blockName?: T;
 }
@@ -2173,6 +2290,14 @@ export interface Setting {
    */
   footerBackgroundColor: string;
   /**
+   * Default font for the whole site.
+   */
+  fontFamily: 'lato' | 'beVietnamPro' | 'inter' | 'roboto' | 'openSans' | 'montserrat' | 'nunito' | 'notoSans';
+  /**
+   * Default text size for the whole site. Headings and spacing scale with it.
+   */
+  baseFontSize: number;
+  /**
    * Used in the logo alt text and browser metadata.
    */
   siteTitle: string;
@@ -2269,6 +2394,8 @@ export interface SettingsSelect<T extends boolean = true> {
   homePage?: T;
   primaryColor?: T;
   footerBackgroundColor?: T;
+  fontFamily?: T;
+  baseFontSize?: T;
   siteTitle?: T;
   updatedAt?: T;
   createdAt?: T;
