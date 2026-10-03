@@ -16,6 +16,7 @@ const messages = {
     search: 'Tìm kiếm',
     searchPlaceholder: 'Tìm bài viết...',
     showDetails: 'Xem thêm',
+    viewPublication: 'Xem bài báo',
   },
   en: {
     basicSites: 'Basic Sites',
@@ -32,6 +33,7 @@ const messages = {
     search: 'Search',
     searchPlaceholder: 'Search posts...',
     showDetails: 'Show more',
+    viewPublication: 'View publication',
   },
 } as const
 

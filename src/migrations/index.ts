@@ -18,6 +18,7 @@ import * as migration_20261003_024100_hero_type_default_high_impact from './2026
 import * as migration_20261003_030436_contact_block from './20261003_030436_contact_block';
 import * as migration_20261003_035202_carousel_mobile_height from './20261003_035202_carousel_mobile_height';
 import * as migration_20261003_063300_copy_missing_locales from './20261003_063300_copy_missing_locales';
+import * as migration_20261003_065819_publications_block from './20261003_065819_publications_block';
 
 export const migrations = [
   {
@@ -113,11 +114,16 @@ export const migrations = [
   {
     up: migration_20261003_035202_carousel_mobile_height.up,
     down: migration_20261003_035202_carousel_mobile_height.down,
-    name: '20261003_035202_carousel_mobile_height'
+    name: '20261003_035202_carousel_mobile_height',
   },
   {
     up: migration_20261003_063300_copy_missing_locales.up,
     down: migration_20261003_063300_copy_missing_locales.down,
     name: '20261003_063300_copy_missing_locales',
+  },
+  {
+    up: migration_20261003_065819_publications_block.up,
+    down: migration_20261003_065819_publications_block.down,
+    name: '20261003_065819_publications_block'
   },
 ];

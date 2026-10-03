@@ -57,7 +57,7 @@ const TeamMemberRow: React.FC<{ member: TeamMember; t: Messages }> = ({ member, 
         )}
         {description && (
           <details className="group/details mt-3">
-            <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-primary hover:underline [&::-webkit-details-marker]:hidden">
+            <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-primary [&::-webkit-details-marker]:hidden">
               <span className="group-open/details:hidden">{t.showDetails}</span>
               <span className="hidden group-open/details:inline">{t.hideDetails}</span>
               <ChevronDown

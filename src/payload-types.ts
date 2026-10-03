@@ -218,6 +218,7 @@ export interface Page {
     | HomePartnersBlock
     | FeatureBlock
     | ContactBlock
+    | PublicationsBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1171,6 +1172,73 @@ export interface ContactBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PublicationsBlock".
+ */
+export interface PublicationsBlock {
+  introContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  publications?:
+    | {
+        title: string;
+        /**
+         * The title links here, e.g. https://pubmed.ncbi.nlm.nih.gov/…
+         */
+        url: string;
+        /**
+         * Shown in italics.
+         */
+        authors?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        description?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'publications';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1490,6 +1558,7 @@ export interface PagesSelect<T extends boolean = true> {
         homePartners?: T | HomePartnersBlockSelect<T>;
         featureBlock?: T | FeatureBlockSelect<T>;
         contactBlock?: T | ContactBlockSelect<T>;
+        publications?: T | PublicationsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1764,6 +1833,24 @@ export interface ContactBlockSelect<T extends boolean = true> {
   content?: T;
   map?: T;
   mapHeight?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PublicationsBlock_select".
+ */
+export interface PublicationsBlockSelect<T extends boolean = true> {
+  introContent?: T;
+  publications?:
+    | T
+    | {
+        title?: T;
+        url?: T;
+        authors?: T;
+        description?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

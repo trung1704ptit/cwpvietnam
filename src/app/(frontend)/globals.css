@@ -215,6 +215,14 @@
   ul > li::marker {
     color: var(--primary);
   }
+  a {
+    @apply transition-colors;
+  }
+  /* Base layer: links with an explicit text-* utility keep their own color */
+  a:hover {
+    color: var(--primary);
+    text-decoration: none;
+  }
 }
 
 html {
