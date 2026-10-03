@@ -115,7 +115,7 @@ const NavigationProgressBar: React.FC = () => {
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-[80] h-[3px]">
       <div
-        className="h-full origin-left bg-primary shadow-[0_0_12px_var(--primary)] ease-out"
+        className="h-full origin-left bg-white shadow-[0_0_12px_rgb(255_255_255/0.85)] ease-out"
         style={{
           opacity: phase === 'idle' ? 0 : 1,
           transition:

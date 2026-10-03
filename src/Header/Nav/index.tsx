@@ -11,9 +11,8 @@ import { getMessages } from '@/i18n/messages'
 import type { Locale } from '@/i18n/config'
 import { getCMSLinkHref } from '@/utilities/getCMSLinkHref'
 import { cn } from '@/utilities/ui'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, Menu, SearchIcon, X } from 'lucide-react'
+import { ChevronDown, Menu, X } from 'lucide-react'
 
 type NavItem = NonNullable<HeaderType['navItems']>[number]
 type NavLink = NavItem['link']
@@ -204,10 +203,6 @@ const MobileDrawer: React.FC<{
           {navItems.map((item, i) => (
             <MobileNavItem item={item} key={item.id || i} />
           ))}
-          <Link className="mt-4 flex items-center gap-2 py-3 text-base text-white" href="/search">
-            <SearchIcon className="size-5" />
-            {t.search}
-          </Link>
           <div className="mt-auto border-t border-white/20 py-4">
             <LocaleSwitcher className="w-full" locale={locale} />
           </div>
@@ -253,10 +248,6 @@ const HeaderNavInner: React.FC<{ data: HeaderType; locale: Locale }> = ({ data, 
         {navItems.map((item, i) => (
           <DesktopNavItem item={item} key={item.id || i} />
         ))}
-        <Link href="/search">
-          <span className="sr-only">{t.search}</span>
-          <SearchIcon className="w-5 text-white" />
-        </Link>
       </nav>
 
       <button

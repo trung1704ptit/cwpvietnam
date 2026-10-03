@@ -171,13 +171,13 @@ export const CarouselBlock: React.FC<CarouselBlockProps> = ({
       />
 
       <div className="container absolute inset-0 z-10 grid grid-rows-[1fr_auto_2fr] justify-items-center px-12 text-center sm:px-20">
-        <div className="row-start-2 max-w-5xl">
-          <h2 className="text-xl font-bold leading-tight tracking-tight sm:text-4xl md:text-6xl mb-6">
+        <div className="row-start-2 max-w-5xl mt-6">
+          <h2 className="text-2xl font-bold leading-tight tracking-tight sm:text-4xl md:text-6xl mb-6">
             {activeSlide.title}
           </h2>
           {activeSlide.text && (
             <RichText
-              className="mx-auto mt-2 line-clamp-2 max-w-5xl text-sm leading-relaxed sm:mt-5 sm:line-clamp-none sm:text-base md:text-lg [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-2 [&_ul]:list-inside [&_ul]:list-disc"
+              className="mx-auto mt-6 max-w-5xl text-lg leading-relaxed md:text-2xl [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-2 [&_ul]:list-inside [&_ul]:list-disc"
               data={activeSlide.text}
               enableGutter={false}
               enableProse={false}
@@ -185,7 +185,7 @@ export const CarouselBlock: React.FC<CarouselBlockProps> = ({
           )}
           {activeSlide.buttons?.[0]?.link && (
             <div className="mt-3 flex justify-center sm:mt-8">
-              <CMSLink {...activeSlide.buttons[0].link} size="xl" />
+              <CMSLink {...activeSlide.buttons[0].link} />
             </div>
           )}
         </div>
