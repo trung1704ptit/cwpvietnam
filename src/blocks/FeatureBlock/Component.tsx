@@ -70,6 +70,7 @@ export const FeatureBlock: React.FC<FeatureBlockProps> = ({
   enableLink,
   items,
   link,
+  maxWidth,
   title,
 }) => {
   const columnCount = columns ?? '4'
@@ -81,78 +82,80 @@ export const FeatureBlock: React.FC<FeatureBlockProps> = ({
 
   return (
     <section className="container my-16 lg:my-24">
-      {title && (
-        <div className="mx-auto mb-12 flex max-w-3xl flex-col items-center text-center">
-          <RichText
-            className="text-3xl font-bold leading-tight tracking-tight md:text-4xl [&_p+p]:mt-2"
-            data={title}
-            enableGutter={false}
-            enableProse={false}
-          />
-          <span aria-hidden="true" className="mt-5 h-1 w-14 rounded-full bg-primary" />
-        </div>
-      )}
+      <div className="mx-auto" style={maxWidth ? { maxWidth } : undefined}>
+        {title && (
+          <div className="mx-auto mb-12 flex max-w-3xl flex-col items-center text-center">
+            <RichText
+              className="text-3xl font-bold leading-tight tracking-tight md:text-4xl [&_p+p]:mt-2"
+              data={title}
+              enableGutter={false}
+              enableProse={false}
+            />
+            <span aria-hidden="true" className="mt-5 h-1 w-14 rounded-full bg-primary" />
+          </div>
+        )}
 
-      {items && items.length > 0 && (
-        <ul className="flex flex-wrap justify-center gap-6">
-          {items.map((item, index) => {
-            const isIcon = item.mediaType === 'icon'
-            const media =
-              !isIcon && item.media && typeof item.media === 'object' ? item.media : null
+        {items && items.length > 0 && (
+          <ul className="flex flex-wrap justify-center gap-6">
+            {items.map((item, index) => {
+              const isIcon = item.mediaType === 'icon'
+              const media =
+                !isIcon && item.media && typeof item.media === 'object' ? item.media : null
 
-            return (
-              <li className={cn('w-full', itemWidths[columnCount])} key={item.id ?? index}>
-                <article
-                  className={cn(
-                    'flex h-full flex-col rounded-2xl bg-white p-6 shadow-[0_10px_32px_-10px_rgb(0_0_0/0.3)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_48px_-14px_rgb(0_0_0/0.4)] dark:bg-card',
-                    isCenter ? 'items-center text-center' : 'items-start text-left',
-                  )}
-                >
-                  {isIcon && item.icon && (
-                    <DynamicIcon
-                      aria-hidden="true"
-                      className={cn('mb-6 shrink-0', !item.iconColor && 'text-primary')}
-                      color={item.iconColor || undefined}
-                      size={item.iconSize ?? 48}
-                      value={item.icon}
-                    />
-                  )}
-                  {media && (
-                    <FeatureMedia align={align} item={item} media={media} sizes={mediaSizes} />
-                  )}
-                  {item.title && (
-                    <RichText
-                      className="w-full text-xl font-bold leading-snug [&_p+p]:mt-1"
-                      data={item.title}
-                      enableGutter={false}
-                      enableProse={false}
-                    />
-                  )}
-                  {item.description && (
-                    <RichText
-                      className="mt-3 w-full text-base leading-relaxed text-muted-foreground [&_a]:text-primary [&_a]:underline [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-3 [&_ul]:list-inside [&_ul]:list-disc"
-                      data={item.description}
-                      enableGutter={false}
-                      enableProse={false}
-                    />
-                  )}
-                  {item.enableLink && item.link && (
-                    <div className="mt-auto pt-6">
-                      <CMSLink {...item.link} />
-                    </div>
-                  )}
-                </article>
-              </li>
-            )
-          })}
-        </ul>
-      )}
+              return (
+                <li className={cn('w-full', itemWidths[columnCount])} key={item.id ?? index}>
+                  <article
+                    className={cn(
+                      'flex h-full flex-col rounded-2xl bg-white p-6 shadow-[0_10px_32px_-10px_rgb(0_0_0/0.3)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_48px_-14px_rgb(0_0_0/0.4)] dark:bg-card',
+                      isCenter ? 'items-center text-center' : 'items-start text-left',
+                    )}
+                  >
+                    {isIcon && item.icon && (
+                      <DynamicIcon
+                        aria-hidden="true"
+                        className={cn('mb-6 shrink-0', !item.iconColor && 'text-primary')}
+                        color={item.iconColor || undefined}
+                        size={item.iconSize ?? 48}
+                        value={item.icon}
+                      />
+                    )}
+                    {media && (
+                      <FeatureMedia align={align} item={item} media={media} sizes={mediaSizes} />
+                    )}
+                    {item.title && (
+                      <RichText
+                        className="w-full text-xl font-bold leading-snug [&_p+p]:mt-1"
+                        data={item.title}
+                        enableGutter={false}
+                        enableProse={false}
+                      />
+                    )}
+                    {item.description && (
+                      <RichText
+                        className="mt-3 w-full text-base leading-relaxed text-muted-foreground [&_a]:text-primary [&_a]:underline [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-3 [&_ul]:list-inside [&_ul]:list-disc"
+                        data={item.description}
+                        enableGutter={false}
+                        enableProse={false}
+                      />
+                    )}
+                    {item.enableLink && item.link && (
+                      <div className="mt-auto pt-6">
+                        <CMSLink size="lg" {...item.link} />
+                      </div>
+                    )}
+                  </article>
+                </li>
+              )
+            })}
+          </ul>
+        )}
 
-      {showLink && link && (
-        <div className="mt-12 flex justify-center">
-          <CMSLink size="lg" {...link} />
-        </div>
-      )}
+        {showLink && link && (
+          <div className="mt-12 flex justify-center">
+            <CMSLink size="xl" {...link} />
+          </div>
+        )}
+      </div>
     </section>
   )
 }

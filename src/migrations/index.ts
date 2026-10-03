@@ -11,6 +11,8 @@ import * as migration_20260926_102948_add_team_members from './20260926_102948_a
 import * as migration_20261001_140147_add_home_partners_feature_block from './20261001_140147_add_home_partners_feature_block';
 import * as migration_20261001_141714_home_partners_image_aspect_options from './20261001_141714_home_partners_image_aspect_options';
 import * as migration_20261001_151320_feature_block_icon from './20261001_151320_feature_block_icon';
+import * as migration_20261003_022650_feature_block_max_width from './20261003_022650_feature_block_max_width';
+import * as migration_20261003_023017_feature_block_media_size_default from './20261003_023017_feature_block_media_size_default';
 
 export const migrations = [
   {
@@ -76,6 +78,16 @@ export const migrations = [
   {
     up: migration_20261001_151320_feature_block_icon.up,
     down: migration_20261001_151320_feature_block_icon.down,
-    name: '20261001_151320_feature_block_icon'
+    name: '20261001_151320_feature_block_icon',
+  },
+  {
+    up: migration_20261003_022650_feature_block_max_width.up,
+    down: migration_20261003_022650_feature_block_max_width.down,
+    name: '20261003_022650_feature_block_max_width',
+  },
+  {
+    up: migration_20261003_023017_feature_block_media_size_default.up,
+    down: migration_20261003_023017_feature_block_media_size_default.down,
+    name: '20261003_023017_feature_block_media_size_default'
   },
 ];

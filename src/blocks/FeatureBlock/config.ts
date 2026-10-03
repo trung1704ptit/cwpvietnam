@@ -28,7 +28,7 @@ export const FeatureBlock: Block = {
           type: 'select',
           admin: {
             description: 'Items per row on desktop. Extra items wrap and stay centered.',
-            width: '50%',
+            width: '33%',
           },
           defaultValue: '4',
           options: ['2', '3', '4', '5', '6'].map((value) => ({ label: value, value })),
@@ -37,7 +37,7 @@ export const FeatureBlock: Block = {
         {
           name: 'align',
           type: 'select',
-          admin: { width: '50%' },
+          admin: { width: '33%' },
           defaultValue: 'left',
           label: 'Content alignment',
           options: [
@@ -45,6 +45,19 @@ export const FeatureBlock: Block = {
             { label: 'Center', value: 'center' },
           ],
           required: true,
+        },
+        {
+          name: 'maxWidth',
+          type: 'number',
+          admin: {
+            description:
+              'Limits the width of all content and keeps it centered. Leave empty for full container width.',
+            placeholder: 'Full width',
+            step: 10,
+            width: '33%',
+          },
+          label: 'Max width (px)',
+          min: 200,
         },
       ],
     },
@@ -137,11 +150,11 @@ export const FeatureBlock: Block = {
               name: 'mediaSize',
               type: 'select',
               admin: { width: '34%' },
-              defaultValue: 'custom',
-              label: 'Icon / image size',
+              defaultValue: 'full',
+              label: 'Image size',
               options: [
-                { label: 'Custom', value: 'custom' },
                 { label: 'Full width', value: 'full' },
+                { label: 'Custom', value: 'custom' },
               ],
             },
             {

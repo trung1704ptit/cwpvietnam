@@ -1003,6 +1003,10 @@ export interface FeatureBlock {
    */
   columns: '2' | '3' | '4' | '5' | '6';
   align: 'left' | 'center';
+  /**
+   * Limits the width of all content and keeps it centered. Leave empty for full container width.
+   */
+  maxWidth?: number | null;
   items?:
     | {
         mediaType?: ('image' | 'icon') | null;
@@ -1013,7 +1017,7 @@ export interface FeatureBlock {
         iconColor?: string | null;
         iconSize?: number | null;
         media?: (number | null) | Media;
-        mediaSize?: ('custom' | 'full') | null;
+        mediaSize?: ('full' | 'custom') | null;
         mediaWidth?: number | null;
         mediaHeight?: number | null;
         title?: {
@@ -1600,6 +1604,7 @@ export interface FeatureBlockSelect<T extends boolean = true> {
   title?: T;
   columns?: T;
   align?: T;
+  maxWidth?: T;
   items?:
     | T
     | {

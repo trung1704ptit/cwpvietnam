@@ -3,7 +3,7 @@
 import type { StaticImageData } from 'next/image'
 
 import { cn } from '@/utilities/ui'
-import NextImage from 'next/image'
+// import NextImage from 'next/image'
 import React from 'react'
 
 import type { Props as MediaProps } from '../types'
@@ -86,18 +86,18 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
   return (
     <picture className={cn(pictureClassName)}>
-      <NextImage
+      <img
         alt={alt || ''}
-        className={cn(imgClassName)}
-        fill={fill}
+        className={cn(imgClassName, 'w-full')}
+        // fill={fill}
         height={!fill ? height : undefined}
-        placeholder="blur"
-        blurDataURL={placeholderBlur}
-        priority={priority}
-        quality={100}
+        // placeholder="blur"
+        // blurDataURL={placeholderBlur}
+        // priority={priority}
+        // quality={100}
         loading={loading}
         sizes={sizes}
-        src={src}
+        src={src as string}
         width={!fill ? width : undefined}
       />
     </picture>
