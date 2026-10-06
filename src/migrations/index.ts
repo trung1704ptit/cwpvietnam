@@ -21,6 +21,8 @@ import * as migration_20261003_063300_copy_missing_locales from './20261003_0633
 import * as migration_20261003_065819_publications_block from './20261003_065819_publications_block';
 import * as migration_20261003_081029_posts_list_block from './20261003_081029_posts_list_block';
 import * as migration_20261006_075513_add_backups from './20261006_075513_add_backups';
+import * as migration_20261006_083723_project_phases_block from './20261006_083723_project_phases_block';
+import * as migration_20261006_085302_project_phases_description_rich_text from './20261006_085302_project_phases_description_rich_text';
 
 export const migrations = [
   {
@@ -136,6 +138,16 @@ export const migrations = [
   {
     up: migration_20261006_075513_add_backups.up,
     down: migration_20261006_075513_add_backups.down,
-    name: '20261006_075513_add_backups'
+    name: '20261006_075513_add_backups',
+  },
+  {
+    up: migration_20261006_083723_project_phases_block.up,
+    down: migration_20261006_083723_project_phases_block.down,
+    name: '20261006_083723_project_phases_block',
+  },
+  {
+    up: migration_20261006_085302_project_phases_description_rich_text.up,
+    down: migration_20261006_085302_project_phases_description_rich_text.down,
+    name: '20261006_085302_project_phases_description_rich_text'
   },
 ];

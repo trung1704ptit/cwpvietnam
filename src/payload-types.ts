@@ -222,6 +222,7 @@ export interface Page {
     | ContactBlock
     | PublicationsBlock
     | PostsListBlock
+    | ProjectPhasesBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1259,6 +1260,60 @@ export interface PostsListBlock {
   blockType: 'postsList';
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectPhasesBlock".
+ */
+export interface ProjectPhasesBlock {
+  title?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  backgroundColor?: string | null;
+  /**
+   * Leave empty to use the built-in world map.
+   */
+  backgroundImage?: (number | null) | Media;
+  /**
+   * Numbered in order. 3–4 phases fit best on one row.
+   */
+  phases?:
+    | {
+        icon?: string | null;
+        title: string;
+        description?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'projectPhases';
+}
+/**
  * Snapshots of every database table. Media files stay in R2 and are not part of a backup.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1638,6 +1693,7 @@ export interface PagesSelect<T extends boolean = true> {
         contactBlock?: T | ContactBlockSelect<T>;
         publications?: T | PublicationsBlockSelect<T>;
         postsList?: T | PostsListBlockSelect<T>;
+        projectPhases?: T | ProjectPhasesBlockSelect<T>;
       };
   meta?:
     | T
@@ -1941,6 +1997,25 @@ export interface PostsListBlockSelect<T extends boolean = true> {
   columns?: T;
   postsPerPage?: T;
   showAuthor?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectPhasesBlock_select".
+ */
+export interface ProjectPhasesBlockSelect<T extends boolean = true> {
+  title?: T;
+  backgroundColor?: T;
+  backgroundImage?: T;
+  phases?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

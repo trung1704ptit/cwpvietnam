@@ -90,7 +90,7 @@ const DesktopNavItem: React.FC<{ item: NavItem }> = ({ item }) => {
         <div className="rounded-md border border-border bg-background py-2 text-foreground shadow-md">
           {children.map((child, i) => (
             <NavItemLink
-              className="flex w-full justify-start px-4 py-2 text-left text-primary hover:bg-primary/10 hover:text-primary"
+              className="flex w-full justify-start px-4 py-2 text-left text-back/10 hover:text-primary hover:bg-primary/10"
               key={child.id || i}
               link={child.link}
             />

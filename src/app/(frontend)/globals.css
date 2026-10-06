@@ -45,6 +45,21 @@
   --breakpoint-2xl: 86rem;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-sans: var(--font-site, var(--font-lato)), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-phase-flow-x: phase-flow-x 1.2s linear infinite;
+  --animate-phase-flow-y: phase-flow-y 1.2s linear infinite;
+
+  @keyframes phase-flow-x {
+    to {
+      background-position: 16px 0;
+    }
+  }
+
+  @keyframes phase-flow-y {
+    to {
+      background-position: 0 16px;
+    }
+  }
 }
 
 @layer utilities {

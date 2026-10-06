@@ -13,6 +13,7 @@ import { FormBlock } from '@/blocks/Form/Component'
 import { HomePartnersBlock } from '@/blocks/HomePartners/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { PostsListBlock } from '@/blocks/PostsList/Component'
+import { ProjectPhasesBlock } from '@/blocks/ProjectPhases/Component'
 import { PublicationsBlock } from '@/blocks/Publications/Component'
 import { TeamBlock } from '@/blocks/Team/Component'
 
@@ -27,6 +28,7 @@ const blockComponents = {
   homePartners: HomePartnersBlock,
   mediaBlock: MediaBlock,
   postsList: PostsListBlock,
+  projectPhases: ProjectPhasesBlock,
   publications: PublicationsBlock,
   team: TeamBlock,
 }

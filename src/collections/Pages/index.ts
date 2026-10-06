@@ -12,6 +12,7 @@ import { FormBlock } from '../../blocks/Form/config'
 import { HomePartners } from '../../blocks/HomePartners/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { PostsList } from '../../blocks/PostsList/config'
+import { ProjectPhases } from '../../blocks/ProjectPhases/config'
 import { Publications } from '../../blocks/Publications/config'
 import { Team } from '../../blocks/Team/config'
 import { hero } from '@/heros/config'
@@ -95,6 +96,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Contact,
                 Publications,
                 PostsList,
+                ProjectPhases,
               ],
               required: true,
               admin: {
