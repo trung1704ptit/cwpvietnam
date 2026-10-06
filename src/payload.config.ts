@@ -4,6 +4,7 @@ import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
+import { Backups } from './collections/Backups'
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -76,7 +77,7 @@ export default buildConfig({
     // Use committed migrations instead of interactive Drizzle push (avoids rename prompts).
     push: false,
   }),
-  collections: [Pages, Posts, Media, Categories, Tags, TeamMembers, Users],
+  collections: [Pages, Posts, Media, Categories, Tags, TeamMembers, Users, Backups],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, Settings],
   localization: {

@@ -17,8 +17,10 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 
 import { defaultLocale, isLocale } from '@/i18n/config'
 import { localizePath } from '@/i18n/paths'
+import { BACKUPS_PREFIX, BACKUPS_SLUG } from '@/backups/constants'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
+import { isR2Enabled, r2Bucket, r2ClientConfig } from '@/utilities/r2'
 
 // The site title is appended by the frontend's title template.
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => doc?.title || ''
@@ -100,19 +102,12 @@ export const plugins: Plugin[] = [
   // Cloudflare R2 via its S3-compatible API. `@payloadcms/storage-r2` only supports Workers bucket bindings.
   s3Storage({
     alwaysInsertFields: true,
-    bucket: process.env.R2_BUCKET || '',
+    bucket: r2Bucket,
     collections: {
+      [BACKUPS_SLUG]: { prefix: BACKUPS_PREFIX },
       media: true,
     },
-    config: {
-      credentials: {
-        accessKeyId: process.env.R2_ACCESS_KEY || '',
-        secretAccessKey: process.env.R2_SECRET_KEY || '',
-      },
-      endpoint: process.env.R2_ENDPOINT,
-      forcePathStyle: true,
-      region: 'auto',
-    },
-    enabled: Boolean(process.env.R2_BUCKET),
+    config: r2ClientConfig,
+    enabled: isR2Enabled,
   }),
 ]

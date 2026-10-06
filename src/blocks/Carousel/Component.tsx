@@ -149,8 +149,8 @@ export const CarouselBlock: React.FC<CarouselBlockProps> = ({
 
   const mobileHeightCss =
     mobileHeightValue === 'auto'
-      ? `@media (width < 48rem){[data-carousel="${carouselId}"]{aspect-ratio:16/9}}`
-      : `@media (width < 48rem){[data-carousel="${carouselId}"]{height:${mobileHeightValue}}}`
+      ? `@media (width < 96rem){[data-carousel="${carouselId}"]{aspect-ratio:16/9}}`
+      : `@media (width < 96rem){[data-carousel="${carouselId}"]{height:${mobileHeightValue}}}`
 
   return (
     <section
@@ -172,12 +172,12 @@ export const CarouselBlock: React.FC<CarouselBlockProps> = ({
 
       <div className="container absolute inset-0 z-10 grid grid-rows-[1fr_auto_2fr] justify-items-center px-12 text-center sm:px-20">
         <div className="row-start-2 max-w-5xl mt-6">
-          <h2 className="text-2xl font-bold leading-tight tracking-tight sm:text-4xl md:text-6xl mb-6">
+          <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl lg:text-6xl mb-6">
             {activeSlide.title}
           </h2>
           {activeSlide.text && (
             <RichText
-              className="mx-auto mt-6 max-w-5xl text-lg leading-relaxed md:text-2xl [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-2 [&_ul]:list-inside [&_ul]:list-disc"
+              className="mx-auto mt-6 max-w-5xl text-lg lg:text-2xl [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-2 [&_ul]:list-inside [&_ul]:list-disc"
               data={activeSlide.text}
               enableGutter={false}
               enableProse={false}

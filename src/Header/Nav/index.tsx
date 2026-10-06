@@ -113,8 +113,11 @@ const MobileNavItem: React.FC<{ item: NavItem }> = ({ item }) => {
   }
 
   return (
-    <div className="border-b border-white/20 py-1">
-      <div className="flex items-center justify-between gap-2">
+    <div>
+      <div
+        className="flex items-center justify-between gap-2"
+        onClick={() => setOpen((current) => !current)}
+      >
         {href ? (
           <NavItemLink className="flex flex-1 justify-start py-3 text-base" link={item.link} />
         ) : (
@@ -167,7 +170,7 @@ const MobileDrawer: React.FC<{
 
   return createPortal(
     <div
-      className={cn('fixed inset-0 z-50 lg:hidden', !menuOpen && 'pointer-events-none')}
+      className={cn('fixed inset-0 z-50 xl:hidden', !menuOpen && 'pointer-events-none')}
       id="mobile-navigation"
     >
       <div
@@ -243,8 +246,8 @@ const HeaderNavInner: React.FC<{ data: HeaderType; locale: Locale }> = ({ data, 
   }, [menuOpen])
 
   return (
-    <div className="flex items-center gap-3 lg:gap-6">
-      <nav className="hidden items-center gap-6 lg:flex xl:gap-8">
+    <div className="flex items-center gap-3 xl:gap-6">
+      <nav className="hidden items-center gap-6 xl:flex xl:gap-8">
         {navItems.map((item, i) => (
           <DesktopNavItem item={item} key={item.id || i} />
         ))}
@@ -254,7 +257,7 @@ const HeaderNavInner: React.FC<{ data: HeaderType; locale: Locale }> = ({ data, 
         aria-controls="mobile-navigation"
         aria-expanded={menuOpen}
         aria-label={menuOpen ? t.closeMenu : t.openMenu}
-        className="inline-flex size-10 items-center justify-center rounded-md text-white lg:hidden"
+        className="inline-flex size-10 items-center justify-center rounded-md text-white xl:hidden"
         onClick={() => setMenuOpen((current) => !current)}
         type="button"
       >

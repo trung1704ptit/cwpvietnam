@@ -74,6 +74,7 @@ export interface Config {
     tags: Tag;
     'team-members': TeamMember;
     users: User;
+    backups: Backup;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -98,6 +99,7 @@ export interface Config {
     tags: TagsSelect<false> | TagsSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    backups: BackupsSelect<false> | BackupsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -1257,6 +1259,59 @@ export interface PostsListBlock {
   blockType: 'postsList';
 }
 /**
+ * Snapshots of every database table. Media files stay in R2 and are not part of a backup.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "backups".
+ */
+export interface Backup {
+  id: number;
+  title?: string | null;
+  note?: string | null;
+  version?: number | null;
+  source?: ('manual' | 'pre-restore' | 'upload') | null;
+  createdBy?: string | null;
+  /**
+   * Latest database migration applied when the backup was taken.
+   */
+  schemaVersion?: string | null;
+  tableCount?: number | null;
+  totalRows?: number | null;
+  mediaCount?: number | null;
+  backupCreatedAt?: string | null;
+  migrations?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  restoreHistory?:
+    | {
+        restoredAt?: string | null;
+        restoredBy?: string | null;
+        /**
+         * Backup taken right before this restore.
+         */
+        safetyBackupVersion?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  prefix?: string | null;
+  _objectKey?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
@@ -1473,6 +1528,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'backups';
+        value: number | Backup;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -2008,6 +2067,42 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "backups_select".
+ */
+export interface BackupsSelect<T extends boolean = true> {
+  title?: T;
+  note?: T;
+  version?: T;
+  source?: T;
+  createdBy?: T;
+  schemaVersion?: T;
+  tableCount?: T;
+  totalRows?: T;
+  mediaCount?: T;
+  backupCreatedAt?: T;
+  migrations?: T;
+  restoreHistory?:
+    | T
+    | {
+        restoredAt?: T;
+        restoredBy?: T;
+        safetyBackupVersion?: T;
+        id?: T;
+      };
+  prefix?: T;
+  _objectKey?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -43,7 +43,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
         </Link>
         <div className="flex items-center gap-3">
           <HeaderNav data={data} locale={locale} />
-          <LocaleSwitcher locale={locale} />
+          <div className="hidden xl:block">
+            <LocaleSwitcher locale={locale} />
+          </div>
         </div>
       </div>
     </header>
