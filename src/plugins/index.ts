@@ -109,16 +109,29 @@ export const plugins: Plugin[] = [
   s3Storage({
     alwaysInsertFields: true,
     bucket: r2Bucket,
+    // Vercel rejects request bodies over 4.5MB, so the admin PUTs media straight to R2 through a
+    // presigned URL. Needs a CORS rule on the bucket allowing PUT from the site's origins.
+    clientUploads: true,
     collections: {
-      [BACKUPS_SLUG]: { prefix: BACKUPS_PREFIX },
       // Media is public, so browsers load it straight from R2's CDN instead of through a
-      // serverless function. Backups stay behind Payload's access control.
+      // serverless function.
       media: r2PublicUrl
         ? {
             disablePayloadAccessControl: true,
             generateFileURL: ({ filename, prefix }) => getR2PublicFileURL(filename, prefix),
           }
         : true,
+    },
+    config: r2ClientConfig,
+    enabled: isR2Enabled,
+  }),
+  // Separate instance without client uploads: backup files are renamed and parsed on the server
+  // (`src/backups/hooks.ts`), and stay behind Payload's access control.
+  s3Storage({
+    alwaysInsertFields: true,
+    bucket: r2Bucket,
+    collections: {
+      [BACKUPS_SLUG]: { prefix: BACKUPS_PREFIX },
     },
     config: r2ClientConfig,
     enabled: isR2Enabled,

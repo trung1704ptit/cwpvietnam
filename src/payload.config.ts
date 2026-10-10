@@ -22,6 +22,8 @@ import { getServerSideURL } from './utilities/getURL'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const MAX_UPLOAD_SIZE = 100 * 1024 * 1024
+
 export default buildConfig({
   admin: {
     components: {
@@ -100,6 +102,11 @@ export default buildConfig({
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
+  },
+  upload: {
+    limits: {
+      fileSize: MAX_UPLOAD_SIZE,
+    },
   },
   jobs: {
     access: {

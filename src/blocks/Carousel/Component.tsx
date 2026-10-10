@@ -189,7 +189,7 @@ export const CarouselBlock: React.FC<CarouselBlockProps> = ({
       data-carousel={carouselId}
     >
       <style dangerouslySetInnerHTML={{ __html: mobileHeightCss }} />
-      <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+      <div aria-hidden="true" className="absolute inset-0 isolate overflow-hidden">
         {backgroundLayers.map(({ index, key, slide }) => (
           <div
             className={cn(
