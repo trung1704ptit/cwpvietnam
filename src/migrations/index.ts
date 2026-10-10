@@ -23,6 +23,7 @@ import * as migration_20261003_081029_posts_list_block from './20261003_081029_p
 import * as migration_20261006_075513_add_backups from './20261006_075513_add_backups';
 import * as migration_20261006_083723_project_phases_block from './20261006_083723_project_phases_block';
 import * as migration_20261006_085302_project_phases_description_rich_text from './20261006_085302_project_phases_description_rich_text';
+import * as migration_20261010_064209_team_members_localized_name from './20261010_064209_team_members_localized_name';
 
 export const migrations = [
   {
@@ -148,6 +149,11 @@ export const migrations = [
   {
     up: migration_20261006_085302_project_phases_description_rich_text.up,
     down: migration_20261006_085302_project_phases_description_rich_text.down,
-    name: '20261006_085302_project_phases_description_rich_text'
+    name: '20261006_085302_project_phases_description_rich_text',
+  },
+  {
+    up: migration_20261010_064209_team_members_localized_name.up,
+    down: migration_20261010_064209_team_members_localized_name.down,
+    name: '20261010_064209_team_members_localized_name'
   },
 ];

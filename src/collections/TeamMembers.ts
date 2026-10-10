@@ -61,6 +61,7 @@ export const TeamMembers: CollectionConfig = {
       name: 'fullName',
       type: 'richText',
       label: 'Full name',
+      localized: true,
       required: true,
     },
     {
@@ -93,6 +94,7 @@ export const TeamMembers: CollectionConfig = {
       },
       index: true,
       label: 'Display name',
+      localized: true,
     },
   ],
 }
