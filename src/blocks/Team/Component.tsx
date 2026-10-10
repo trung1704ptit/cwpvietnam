@@ -88,7 +88,7 @@ export const TeamBlock: React.FC<TeamBlockProps & { id?: string; locale: Locale 
 
   if (populateBy === 'selection') {
     members = (selectedMembers ?? []).filter(
-      (member): member is TeamMember => typeof member === 'object' && member.active !== false,
+      (member): member is TeamMember => typeof member === 'object',
     )
   } else {
     const payload = await getPayload({ config: configPromise })
@@ -98,7 +98,6 @@ export const TeamBlock: React.FC<TeamBlockProps & { id?: string; locale: Locale 
       locale,
       pagination: false,
       sort: '_order',
-      where: { active: { equals: true } },
     })
     members = docs
   }

@@ -1,22 +1,13 @@
-import type { Access, CollectionBeforeChangeHook, CollectionConfig } from 'payload'
+import type { CollectionBeforeChangeHook, CollectionConfig } from 'payload'
 
 import { convertLexicalToPlaintext } from '@payloadcms/richtext-lexical/plaintext'
 
+import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
 import {
   revalidateAllPagesAfterChange,
   revalidateAllPagesAfterDelete,
 } from '../hooks/revalidateAllPages'
-
-const authenticatedOrActive: Access = ({ req: { user } }) => {
-  if (user) return true
-
-  return {
-    active: {
-      equals: true,
-    },
-  }
-}
 
 const setNameFromFullName: CollectionBeforeChangeHook = ({ data }) => {
   if (data.fullName) {
@@ -35,11 +26,11 @@ export const TeamMembers: CollectionConfig = {
   access: {
     create: authenticated,
     delete: authenticated,
-    read: authenticatedOrActive,
+    read: anyone,
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['name', 'position', 'active', 'updatedAt'],
+    defaultColumns: ['name', 'position', 'updatedAt'],
     useAsTitle: 'name',
   },
   orderable: true,
@@ -73,16 +64,6 @@ export const TeamMembers: CollectionConfig = {
       name: 'description',
       type: 'richText',
       localized: true,
-    },
-    {
-      name: 'active',
-      type: 'checkbox',
-      admin: {
-        description: 'Inactive members are hidden on the site.',
-        position: 'sidebar',
-      },
-      defaultValue: true,
-      label: 'Active',
     },
     {
       name: 'name',

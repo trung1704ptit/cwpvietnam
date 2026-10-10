@@ -20,7 +20,7 @@ export const Team: Block = {
       defaultValue: 'all',
       label: 'Members to show',
       options: [
-        { label: 'All active members', value: 'all' },
+        { label: 'All members', value: 'all' },
         { label: 'Selected members', value: 'selection' },
       ],
     },
@@ -29,21 +29,10 @@ export const Team: Block = {
       type: 'relationship',
       admin: {
         condition: (_, siblingData) => siblingData?.populateBy === 'selection',
-        description: 'Shown in this order. Inactive members are skipped.',
+        description: 'Shown in this order.',
       },
       hasMany: true,
       relationTo: 'team-members',
-    },
-    {
-      name: 'columns',
-      type: 'select',
-      defaultValue: '3',
-      label: 'Columns (desktop)',
-      options: [
-        { label: '2', value: '2' },
-        { label: '3', value: '3' },
-        { label: '4', value: '4' },
-      ],
     },
   ],
 }

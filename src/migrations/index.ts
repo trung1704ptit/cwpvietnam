@@ -24,6 +24,7 @@ import * as migration_20261006_075513_add_backups from './20261006_075513_add_ba
 import * as migration_20261006_083723_project_phases_block from './20261006_083723_project_phases_block';
 import * as migration_20261006_085302_project_phases_description_rich_text from './20261006_085302_project_phases_description_rich_text';
 import * as migration_20261010_064209_team_members_localized_name from './20261010_064209_team_members_localized_name';
+import * as migration_20261010_071050_team_remove_active_and_columns from './20261010_071050_team_remove_active_and_columns';
 
 export const migrations = [
   {
@@ -154,6 +155,11 @@ export const migrations = [
   {
     up: migration_20261010_064209_team_members_localized_name.up,
     down: migration_20261010_064209_team_members_localized_name.down,
-    name: '20261010_064209_team_members_localized_name'
+    name: '20261010_064209_team_members_localized_name',
+  },
+  {
+    up: migration_20261010_071050_team_remove_active_and_columns.up,
+    down: migration_20261010_071050_team_remove_active_and_columns.down,
+    name: '20261010_071050_team_remove_active_and_columns'
   },
 ];

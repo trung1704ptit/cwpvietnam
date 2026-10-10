@@ -859,10 +859,9 @@ export interface TeamBlock {
   } | null;
   populateBy?: ('all' | 'selection') | null;
   /**
-   * Shown in this order. Inactive members are skipped.
+   * Shown in this order.
    */
   members?: (number | TeamMember)[] | null;
-  columns?: ('2' | '3' | '4') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'team';
@@ -906,10 +905,6 @@ export interface TeamMember {
     };
     [k: string]: unknown;
   } | null;
-  /**
-   * Inactive members are hidden on the site.
-   */
-  active?: boolean | null;
   /**
    * Generated from the full name.
    */
@@ -1840,7 +1835,6 @@ export interface TeamBlockSelect<T extends boolean = true> {
   introContent?: T;
   populateBy?: T;
   members?: T;
-  columns?: T;
   id?: T;
   blockName?: T;
 }
@@ -2114,7 +2108,6 @@ export interface TeamMembersSelect<T extends boolean = true> {
   fullName?: T;
   position?: T;
   description?: T;
-  active?: T;
   name?: T;
   updatedAt?: T;
   createdAt?: T;
