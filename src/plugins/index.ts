@@ -20,7 +20,13 @@ import { localizePath } from '@/i18n/paths'
 import { BACKUPS_PREFIX, BACKUPS_SLUG } from '@/backups/constants'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
-import { isR2Enabled, r2Bucket, r2ClientConfig } from '@/utilities/r2'
+import {
+  getR2PublicFileURL,
+  isR2Enabled,
+  r2Bucket,
+  r2ClientConfig,
+  r2PublicUrl,
+} from '@/utilities/r2'
 
 // The site title is appended by the frontend's title template.
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => doc?.title || ''
@@ -105,7 +111,14 @@ export const plugins: Plugin[] = [
     bucket: r2Bucket,
     collections: {
       [BACKUPS_SLUG]: { prefix: BACKUPS_PREFIX },
-      media: true,
+      // Media is public, so browsers load it straight from R2's CDN instead of through a
+      // serverless function. Backups stay behind Payload's access control.
+      media: r2PublicUrl
+        ? {
+            disablePayloadAccessControl: true,
+            generateFileURL: ({ filename, prefix }) => getR2PublicFileURL(filename, prefix),
+          }
+        : true,
     },
     config: r2ClientConfig,
     enabled: isR2Enabled,

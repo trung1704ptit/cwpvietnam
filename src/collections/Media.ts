@@ -52,6 +52,15 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
+    // Frontend URLs carry `?updatedAt`, so a changed file gets a new URL and Vercel's CDN can
+    // keep responses served through `/api/media/file/*` instead of running a function each time.
+    modifyResponseHeaders: ({ headers }) => {
+      headers.set(
+        'Cache-Control',
+        'public, max-age=86400, s-maxage=31536000, stale-while-revalidate=86400',
+      )
+      return headers
+    },
     // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
     staticDir: path.resolve(dirname, '../../public/media'),
   },
