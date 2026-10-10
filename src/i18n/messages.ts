@@ -3,7 +3,7 @@ import { defaultLocale, type Locale } from './config'
 const messages = {
   vi: {
     allPosts: 'Tất cả bài viết',
-    basicSites: 'Liên kết',
+    siteLinks: 'Liên kết',
     categories: 'Danh mục',
     clearFilter: 'Bỏ lọc',
     closeMenu: 'Đóng menu',
@@ -30,7 +30,7 @@ const messages = {
   },
   en: {
     allPosts: 'All posts',
-    basicSites: 'Basic Sites',
+    siteLinks: 'Links',
     categories: 'Categories',
     clearFilter: 'Clear filter',
     closeMenu: 'Close menu',

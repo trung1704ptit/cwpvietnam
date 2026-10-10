@@ -66,7 +66,7 @@ export async function Footer({ locale }: { locale: Locale }) {
 
           <div className="space-y-3">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">
-              {t.basicSites}
+              {t.siteLinks}
             </h2>
             <nav className="flex flex-col gap-2">
               {navItems.map(({ link }, i) => (

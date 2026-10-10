@@ -38,6 +38,7 @@ export default buildConfig({
         Icon: '@/components/AdminGraphics#AdminIcon',
         Logo: '@/components/AdminGraphics#AdminLogo',
       },
+      providers: ['@/components/SessionKeepAlive#SessionKeepAlive'],
     },
     meta: {
       icons: [{ rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' }],
