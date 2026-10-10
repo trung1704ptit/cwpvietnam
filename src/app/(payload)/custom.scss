@@ -170,6 +170,36 @@ html[data-theme='dark'] .cwp-admin-logo__img--dark {
       transform: translateY(-1px);
       box-shadow: 0 14px 28px -12px rgba(221, 62, 96, 0.75);
     }
+
+    &[aria-busy='true'] {
+      opacity: 1;
+      cursor: progress;
+      transform: none;
+      background-color: var(--cwp-primary-hover);
+
+      .btn__content {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+
+        &::before {
+          content: '';
+          width: 1.05em;
+          height: 1.05em;
+          flex-shrink: 0;
+          border: 2px solid rgba(255, 255, 255, 0.35);
+          border-top-color: #fff;
+          border-radius: 50%;
+          animation: cwp-spin 0.7s linear infinite;
+        }
+      }
+    }
+  }
+}
+
+@keyframes cwp-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 

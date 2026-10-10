@@ -60,6 +60,38 @@
       background-position: 0 16px;
     }
   }
+
+  --animate-carousel-slide-in:
+    carousel-fade-in 1.1s cubic-bezier(0.4, 0, 0.2, 1) both,
+    carousel-zoom-out 9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-carousel-text-in: carousel-text-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-carousel-progress: carousel-progress 5s linear forwards;
+
+  @keyframes carousel-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes carousel-zoom-out {
+    from {
+      transform: scale(1.08);
+    }
+  }
+
+  @keyframes carousel-text-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+      filter: blur(6px);
+    }
+  }
+
+  @keyframes carousel-progress {
+    from {
+      transform: scaleX(0);
+    }
+  }
 }
 
 @layer utilities {

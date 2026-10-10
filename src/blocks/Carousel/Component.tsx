@@ -125,27 +125,56 @@ export const CarouselBlock: React.FC<CarouselBlockProps> = ({
   const reactId = useId().replace(/:/g, '')
   const carouselId = (id || reactId).replace(/[^a-zA-Z0-9_-]/g, '')
   const mobileHeightValue = mobileHeights[mobileHeight ?? '70vh'] ?? mobileHeights['70vh']
-  const [activeIndex, setActiveIndex] = useState(0)
+  // `step` counts transitions; background layers are keyed by it so the outgoing slide keeps its
+  // DOM node (and video playback) while the incoming one mounts fresh and runs its enter animation.
+  const [{ activeIndex, previousIndex, step }, setState] = useState({
+    activeIndex: 0,
+    previousIndex: null as null | number,
+    step: 0,
+  })
   const slideCount = slides?.length ?? 0
-  const activeDuration = slides?.[activeIndex]?.duration ?? interval ?? 5
+  const activeDuration = Math.max(2, slides?.[activeIndex]?.duration ?? interval ?? 5)
+  const shouldAutoplay = Boolean(autoplay) && slideCount > 1
+
+  const goTo = (index: number) =>
+    setState((current) => {
+      const nextIndex = (index + slideCount) % slideCount
+      if (nextIndex === current.activeIndex) return current
+      return { activeIndex: nextIndex, previousIndex: current.activeIndex, step: current.step + 1 }
+    })
 
   useEffect(() => {
-    if (!autoplay || slideCount < 2) return
+    if (!shouldAutoplay) return
 
     const timer = window.setTimeout(
-      () => setActiveIndex((current) => (current + 1) % slideCount),
-      Math.max(2, activeDuration) * 1000,
+      () =>
+        setState((current) => ({
+          activeIndex: (current.activeIndex + 1) % slideCount,
+          previousIndex: current.activeIndex,
+          step: current.step + 1,
+        })),
+      activeDuration * 1000,
     )
 
     return () => window.clearTimeout(timer)
-  }, [activeDuration, activeIndex, autoplay, slideCount])
+  }, [activeDuration, shouldAutoplay, slideCount, step])
 
   if (!slides?.length) return null
 
   const activeSlide = slides[activeIndex] ?? slides[0]
   const overlayOpacity = Math.min(100, Math.max(0, activeSlide.overlayOpacity ?? 60)) / 100
+  const nextIndex = (activeIndex + 1) % slideCount
+  const nextSlide = slides[nextIndex]
+  const preloadNext =
+    slideCount > 1 && nextIndex !== previousIndex && nextSlide?.backgroundType !== 'video'
 
-  const goTo = (index: number) => setActiveIndex((index + slideCount) % slideCount)
+  const backgroundLayers = [
+    ...(previousIndex !== null && slides[previousIndex]
+      ? [{ index: previousIndex, key: step - 1, slide: slides[previousIndex] }]
+      : []),
+    { index: activeIndex, key: step, slide: activeSlide },
+  ]
+  const textAnimation = step > 0 ? 'animate-carousel-text-in motion-reduce:animate-none' : ''
 
   const mobileHeightCss =
     mobileHeightValue === 'auto'
@@ -160,31 +189,63 @@ export const CarouselBlock: React.FC<CarouselBlockProps> = ({
       data-carousel={carouselId}
     >
       <style dangerouslySetInnerHTML={{ __html: mobileHeightCss }} />
-      <div className="absolute inset-0" key={activeSlide.id ?? activeIndex}>
-        <SlideBackground priority={activeIndex === 0} slide={activeSlide} />
+      <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+        {backgroundLayers.map(({ index, key, slide }) => (
+          <div
+            className={cn(
+              'absolute inset-0 will-change-[opacity,transform]',
+              key === step ? 'z-[2]' : 'z-[1]',
+              key > 0 && 'animate-carousel-slide-in motion-reduce:animate-none',
+            )}
+            key={key}
+          >
+            <SlideBackground priority={index === 0 && key === 0} slide={slide} />
+          </div>
+        ))}
+        {preloadNext && nextSlide && (
+          <div className="absolute inset-0 z-0 opacity-0" key={`preload-${nextIndex}`}>
+            <SlideBackground priority={false} slide={nextSlide} />
+          </div>
+        )}
       </div>
 
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-black"
+        className="absolute inset-0 bg-black transition-opacity duration-1000 ease-in-out"
         style={{ opacity: overlayOpacity }}
       />
 
       <div className="container absolute inset-0 z-10 grid grid-rows-[1fr_auto_2fr] justify-items-center px-12 text-center sm:px-20">
-        <div className="row-start-2 max-w-5xl mt-6">
-          <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl lg:text-6xl mb-6">
+        <div aria-live="polite" className="row-start-2 max-w-5xl mt-6" key={step}>
+          <h2
+            className={cn(
+              'text-3xl font-bold leading-tight tracking-tight md:text-4xl lg:text-6xl mb-6',
+              textAnimation,
+              '[animation-delay:250ms]',
+            )}
+          >
             {activeSlide.title}
           </h2>
           {activeSlide.text && (
             <RichText
-              className="mx-auto mt-6 max-w-5xl text-lg lg:text-2xl [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-2 [&_ul]:list-inside [&_ul]:list-disc"
+              className={cn(
+                'mx-auto mt-6 max-w-5xl text-lg lg:text-2xl [&_ol]:list-inside [&_ol]:list-decimal [&_p+p]:mt-2 [&_ul]:list-inside [&_ul]:list-disc',
+                textAnimation,
+                '[animation-delay:400ms]',
+              )}
               data={activeSlide.text}
               enableGutter={false}
               enableProse={false}
             />
           )}
           {activeSlide.buttons?.[0]?.link && (
-            <div className="mt-3 flex justify-center sm:mt-8">
+            <div
+              className={cn(
+                'mt-3 flex justify-center sm:mt-8',
+                textAnimation,
+                '[animation-delay:550ms]',
+              )}
+            >
               <CMSLink {...activeSlide.buttons[0].link} />
             </div>
           )}
@@ -220,15 +281,26 @@ export const CarouselBlock: React.FC<CarouselBlockProps> = ({
                 aria-label={`Go to slide ${index + 1}`}
                 aria-pressed={index === activeIndex}
                 className={cn(
-                  'h-2 rounded-full transition-all sm:h-2.5',
+                  'relative h-2 overflow-hidden rounded-full transition-all duration-500 ease-out sm:h-2.5',
                   index === activeIndex
-                    ? 'w-6 bg-white sm:w-8'
+                    ? 'w-6 bg-white/40 sm:w-8'
                     : 'w-2 bg-white/55 hover:bg-white/80 sm:w-2.5',
                 )}
                 key={slide.id ?? index}
                 onClick={() => goTo(index)}
                 type="button"
-              />
+              >
+                {index === activeIndex && (
+                  <span
+                    className={cn(
+                      'absolute inset-0 origin-left rounded-full bg-white',
+                      shouldAutoplay && 'animate-carousel-progress motion-reduce:animate-none',
+                    )}
+                    key={step}
+                    style={shouldAutoplay ? { animationDuration: `${activeDuration}s` } : undefined}
+                  />
+                )}
+              </button>
             ))}
           </div>
         </>
