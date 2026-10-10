@@ -16,7 +16,7 @@ import React, { useEffect, useState } from 'react'
 
 import type { BackupCheck, RestoreOutcome } from '@/backups/service'
 
-import { requestBackups } from './api'
+import { downloadBackups, requestBackups } from './api'
 import './index.scss'
 
 const MODAL_SLUG = 'confirm-backup-restore'
@@ -102,8 +102,8 @@ export function RestorePanel() {
   const { openModal } = useModal()
   const router = useRouter()
 
-  const url = useFormFields(([fields]) => fields.url?.value as string | undefined)
   const version = useFormFields(([fields]) => fields.version?.value as number | undefined)
+  const [downloading, setDownloading] = useState(false)
 
   const [check, setCheck] = useState<BackupCheck | null>(null)
   const [checkError, setCheckError] = useState<string | null>(null)
@@ -141,6 +141,17 @@ export function RestorePanel() {
       router.refresh()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Restoring the backup failed.')
+    }
+  }
+
+  const download = async () => {
+    setDownloading(true)
+    try {
+      await downloadBackups(api, { ids: [id] })
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Downloading the backup failed.')
+    } finally {
+      setDownloading(false)
     }
   }
 
@@ -186,11 +197,14 @@ export function RestorePanel() {
       )}
 
       <div className="backup-restore__actions">
-        {url && (
-          <Button buttonStyle="secondary" el="anchor" size="medium" url={url}>
-            Download backup
-          </Button>
-        )}
+        <Button
+          buttonStyle="secondary"
+          disabled={downloading}
+          onClick={() => void download()}
+          size="medium"
+        >
+          {downloading ? 'Downloading…' : `Download v${version ?? ''}`.trim()}
+        </Button>
         <Button
           buttonStyle="primary"
           disabled={!canRestore}

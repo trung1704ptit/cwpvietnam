@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import type { Backup } from '@/payload-types'
 
 import { requestBackups } from './api'
+import { DownloadSelected } from './DownloadSelected'
 import './index.scss'
 
 export function CreateBackup() {
@@ -49,6 +50,7 @@ export function CreateBackup() {
       <Button buttonStyle="primary" disabled={creating} onClick={() => void create()} size="medium">
         {creating ? 'Creating backup…' : 'Create backup'}
       </Button>
+      <DownloadSelected />
     </div>
   )
 }

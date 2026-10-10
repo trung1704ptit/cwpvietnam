@@ -1,4 +1,5 @@
 import { GetObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import fs from 'fs/promises'
 import path from 'path'
 import type { Payload } from 'payload'
@@ -35,6 +36,33 @@ export const readBackupFile = async (payload: Payload, backup: Backup): Promise<
   const staticDir = getStaticDir(payload, BACKUPS_SLUG)
   if (!staticDir) throw new Error('Backups have no storage configured.')
   return fs.readFile(path.join(staticDir, path.basename(backup.filename)))
+}
+
+const stamp = (value: string) =>
+  new Date(value).toISOString().slice(0, 16).replace(/[-:]/g, '').replace('T', '-')
+
+/** Readable download name, the stored filename is random on purpose. */
+export const backupDownloadName = (backup: Backup) =>
+  `cwp-backup-v${backup.version ?? backup.id}-${stamp(backup.backupCreatedAt ?? backup.createdAt)}.json.gz`
+
+/**
+ * A short-lived signed R2 link, so the browser downloads straight from R2 instead of through a
+ * serverless function (Vercel caps response bodies at 4.5MB). `null` with local storage.
+ */
+export const getBackupDownloadURL = async (backup: Backup): Promise<null | string> => {
+  if (!isR2Enabled) return null
+  if (!backup.filename) throw new Error(`Backup v${backup.version} has no file.`)
+
+  return getSignedUrl(
+    getR2Client(),
+    new GetObjectCommand({
+      Bucket: r2Bucket,
+      Key: objectKey(backup.prefix ?? BACKUPS_PREFIX, backup.filename),
+      ResponseContentDisposition: `attachment; filename="${backupDownloadName(backup)}"`,
+      ResponseContentType: 'application/gzip',
+    }),
+    { expiresIn: 300 },
+  )
 }
 
 export type MediaCheck = {
