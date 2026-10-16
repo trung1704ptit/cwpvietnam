@@ -9,9 +9,16 @@ import { localizePath } from '@/i18n/paths'
 import { cn } from '@/utilities/ui'
 
 const localeFlags: Record<Locale, string> = {
-  en: '🇬🇧',
-  vi: '🇻🇳',
+  en: 'gb',
+  vi: 'vn',
 }
+
+const LocaleFlag: React.FC<{ locale: Locale }> = ({ locale }) => (
+  <span
+    aria-hidden="true"
+    className={cn('fi shrink-0 rounded-[2px] text-base', `fi-${localeFlags[locale]}`)}
+  />
+)
 
 export const LocaleSwitcher: React.FC<{
   className?: string
@@ -37,14 +44,12 @@ export const LocaleSwitcher: React.FC<{
           className,
         )}
       >
-        <span aria-hidden="true" className="block text-lg leading-normal">
-          {localeFlags[locale]}
-        </span>
+        <LocaleFlag locale={locale} />
       </SelectTrigger>
       <SelectContent>
         {locales.map((code) => (
           <SelectItem key={code} value={code}>
-            <span aria-hidden="true">{localeFlags[code]}</span>
+            <LocaleFlag locale={code} />
             <span>{localeLabels[code]}</span>
           </SelectItem>
         ))}

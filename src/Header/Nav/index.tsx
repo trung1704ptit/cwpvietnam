@@ -247,7 +247,7 @@ const HeaderNavInner: React.FC<{ data: HeaderType; locale: Locale }> = ({ data, 
 
   return (
     <div className="flex items-center gap-3 xl:gap-6">
-      <nav className="hidden items-center gap-6 xl:flex xl:gap-8">
+      <nav className="hidden items-center gap-6 xl:flex">
         {navItems.map((item, i) => (
           <DesktopNavItem item={item} key={item.id || i} />
         ))}
