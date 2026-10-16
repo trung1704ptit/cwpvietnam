@@ -48,7 +48,6 @@ export const Footer: GlobalConfig = {
           disableLocalized: true,
         }),
       ],
-      maxRows: 8,
       admin: {
         initCollapsed: true,
         components: {
@@ -67,7 +66,6 @@ export const Footer: GlobalConfig = {
           disableLocalized: true,
         }),
       ],
-      maxRows: 6,
       admin: {
         initCollapsed: true,
         components: {

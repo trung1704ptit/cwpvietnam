@@ -40,10 +40,8 @@ export const Header: GlobalConfig = {
             singular: 'Nested item',
             plural: 'Nested items',
           },
-          maxRows: 8,
         },
       ],
-      maxRows: 8,
       admin: {
         initCollapsed: true,
         components: {
