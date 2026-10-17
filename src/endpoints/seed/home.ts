@@ -666,9 +666,9 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       },
     ],
     meta: {
-      description: 'An open-source website built with Payload and Next.js.',
+      description: 'Cancer Wellness Program supports people living with and beyond cancer.',
       image: heroImage.id,
-      title: 'Cancer wellness program',
+      title: 'Cancer Wellness Program',
     },
     title: 'Home',
   }

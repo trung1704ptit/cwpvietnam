@@ -80,8 +80,8 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
     },
   },
   meta: {
-    description: 'An open-source website built with Payload and Next.js.',
-    title: 'Cancer wellness program',
+    description: 'Cancer Wellness Program supports people living with and beyond cancer.',
+    title: 'Cancer Wellness Program',
   },
   title: 'Home',
   layout: [],

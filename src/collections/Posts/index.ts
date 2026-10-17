@@ -242,6 +242,7 @@ export const Posts: CollectionConfig<'posts'> = {
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
   },
+  trash: true,
   versions: {
     drafts: {
       schedulePublish: true,

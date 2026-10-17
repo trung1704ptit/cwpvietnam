@@ -149,6 +149,7 @@ export const Pages: CollectionConfig<'pages'> = {
     beforeChange: [populatePublishedAt],
     afterDelete: [revalidateDelete],
   },
+  trash: true,
   versions: {
     drafts: {
       schedulePublish: true,
