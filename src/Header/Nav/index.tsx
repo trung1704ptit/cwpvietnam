@@ -112,12 +112,11 @@ const MobileNavItem: React.FC<{ item: NavItem }> = ({ item }) => {
     return <NavItemLink className="flex w-full justify-start py-3 text-base" link={item.link} />
   }
 
+  const toggleOpen = () => setOpen((current) => !current)
+
   return (
     <div>
-      <div
-        className="flex items-center justify-between gap-2"
-        onClick={() => setOpen((current) => !current)}
-      >
+      <div className="flex items-center justify-between gap-2">
         {href ? (
           <NavItemLink className="flex flex-1 justify-start py-3 text-base" link={item.link} />
         ) : (
@@ -125,7 +124,7 @@ const MobileNavItem: React.FC<{ item: NavItem }> = ({ item }) => {
             aria-controls={submenuId}
             aria-expanded={open}
             className="flex flex-1 justify-start py-3 text-left text-base text-white"
-            onClick={() => setOpen((current) => !current)}
+            onClick={toggleOpen}
             type="button"
           >
             {item.link.label}
@@ -136,7 +135,7 @@ const MobileNavItem: React.FC<{ item: NavItem }> = ({ item }) => {
           aria-expanded={open}
           aria-label={`${item.link.label} submenu`}
           className="inline-flex size-10 shrink-0 items-center justify-center rounded-md text-white"
-          onClick={() => setOpen((current) => !current)}
+          onClick={toggleOpen}
           type="button"
         >
           <ChevronDown className={cn('size-5 transition-transform', open && 'rotate-180')} />
